@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScamBandhKaro — Stay Protected From Online Scams</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .how-step { display: flex; align-items: flex-start; gap: 1.25rem; padding: 1.5rem; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border-light); }
+    .step-num { width: 42px; height: 42px; border-radius: 50%; background: rgba(16,185,129,0.15); border: 2px solid rgba(16,185,129,0.4); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--primary); flex-shrink: 0; }
+    .threat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .threat-item { background: var(--bg-card); border-radius: var(--radius-sm); padding: 1.25rem; border: 1px solid var(--border-light); text-align: center; }
+    .threat-item .threat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .threat-item h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .threat-item p { font-size: 0.82rem; }
+    .hero-scan-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 1.25rem; width: 100%; }
+    .hero-scan-box .scan-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .hero-scan-inner { display: flex; gap: 8px; }
+    .hero-scan-inner input { flex: 1; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+    ScamBandhKaro
+  </a>
+  <ul class="navbar-nav" id="navLinks">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="learn.html">Learn</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="news.html">News</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+    <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" style="position:relative;overflow:hidden;">
+
+  <!-- LAYER 0: Particle network canvas -->
+  <canvas id="heroBg" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
+  <!-- LAYER 1: Floating live-detection notification chips -->
+  <div id="heroChips" style="position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;"></div>
+
+  <!-- LAYER 2: Floating code / data fragments -->
+  <div id="heroFragments" style="position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;"></div>
+
+  <!-- EXISTING circles -->
+  <div class="hero-bg" style="z-index:1;">
+    <div class="hero-circles">
+      <div class="hero-circle"></div>
+      <div class="hero-circle"></div>
+      <div class="hero-circle"></div>
+      <div class="hero-circle"></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="hero-content">
+      <div class="hero-badge"><i class="fa-solid fa-shield-halved"></i> स्कैम बंध करो &nbsp;·&nbsp; Your Digital Shield</div>
+      <h1>Stay Protected From<br><span>Online Scams</span></h1>
+      <p style="font-size:0.88rem;color:var(--primary);font-weight:600;letter-spacing:0.03em;margin-bottom:0.5rem;opacity:0.85;">ऑनलाइन ठगी से बचाव &nbsp;·&nbsp; UPI फ्रॉड &nbsp;·&nbsp; KYC स्कैम &nbsp;·&nbsp; साइबर सुरक्षा</p>
+      <p>Empowering communities with real-time alerts, advanced AI detection tools, and a collaborative reporting network to fight digital fraud.</p>
+      <div class="hero-actions">
+        <a href="alerts.html" class="btn btn-primary btn-lg"><i class="fa-solid fa-bell"></i> Check Latest Scam Alerts</a>
+        <a href="report.html" class="btn btn-outline btn-lg"><i class="fa-solid fa-flag"></i> Report a Scam</a>
+        <a href="tools.html" class="btn btn-ghost btn-lg"><i class="fa-solid fa-magnifying-glass"></i> Scan Suspicious Message</a>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="position:relative;z-index:2;padding-bottom:3rem;">
+    <div class="hero-scan-box">
+      <div class="scan-label">Quick Scan — Paste any suspicious message or link</div>
+      <div class="hero-scan-inner">
+        <input type="text" class="form-control" id="heroScanInput" placeholder="e.g. 'You won $1000! Click here to claim...'">
+        <a href="tools.html" class="btn btn-primary" id="heroScanBtn">Scan →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* ── Floating chip animations ─────────────────────────────────────── */
+.hero-chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  animation: chipFloat 5s ease-in forwards;
+  pointer-events: none;
+}
+.hero-chip.danger  { background: rgba(239,68,68,0.12);  border: 1px solid rgba(239,68,68,0.35);  color: #fca5a5; }
+.hero-chip.safe    { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.35); color: #6ee7b7; }
+.hero-chip.warning { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.35); color: #fcd34d; }
+.hero-chip.info    { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.35);  color: #93c5fd; }
+.hero-chip .chip-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.hero-chip.danger  .chip-dot { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+.hero-chip.safe    .chip-dot { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.hero-chip.warning .chip-dot { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+.hero-chip.info    .chip-dot { background: #60a5fa; box-shadow: 0 0 6px #60a5fa; }
+
+@keyframes chipFloat {
+  0%   { opacity: 0;   transform: translateY(0px) scale(0.85); }
+  10%  { opacity: 1;   transform: translateY(-8px) scale(1); }
+  80%  { opacity: 0.9; transform: translateY(-60px) scale(1); }
+  100% { opacity: 0;   transform: translateY(-90px) scale(0.9); }
+}
+
+/* ── Floating code fragment animations ───────────────────────────── */
+.hero-frag {
+  position: absolute;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  pointer-events: none;
+  animation: fragDrift 7s ease-in forwards;
+}
+.hero-frag.frag-red  { color: rgba(239,68,68,0.35); }
+.hero-frag.frag-green{ color: rgba(16,185,129,0.3); }
+.hero-frag.frag-blue { color: rgba(96,165,250,0.28); }
+
+@keyframes fragDrift {
+  0%   { opacity: 0;    transform: translateY(0) rotate(0deg); }
+  15%  { opacity: 1; }
+  85%  { opacity: 0.5; }
+  100% { opacity: 0;    transform: translateY(-120px) rotate(3deg); }
+}
+</style>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   HERO BACKGROUND FX
+═══════════════════════════════════════════════════════════ */
+(function() {
+  /* ── 1. PARTICLE NETWORK CANVAS ── */
+  const canvas = document.getElementById('heroBg');
+  const ctx    = canvas.getContext('2d');
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width  = rect.width;
+    canvas.height = rect.height || 640;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const NODE_COUNT = 70;
+  const LINK_DIST  = 130;
+
+  class Node {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x  = Math.random() * canvas.width;
+      this.y  = init ? Math.random() * canvas.height : canvas.height + 10;
+      this.vx = (Math.random() - 0.5) * 0.45;
+      this.vy = (Math.random() - 0.5) * 0.45;
+      this.r  = Math.random() * 2.2 + 0.8;
+      this.threat  = Math.random() < 0.18;
+      this.blocked = this.threat && Math.random() < 0.5;
+      this.phase   = Math.random() * Math.PI * 2;
+      this.speed   = Math.random() * 0.04 + 0.02;
+    }
+    update() {
+      this.x    += this.vx;
+      this.y    += this.vy;
+      this.phase += this.speed;
+      if (this.x < -20 || this.x > canvas.width  + 20) this.vx *= -1;
+      if (this.y < -20 || this.y > canvas.height + 20) this.vy *= -1;
+    }
+    draw() {
+      const pulse = 0.5 + Math.sin(this.phase) * 0.5;
+      let color, glow;
+      if (this.blocked)     { color = `rgba(16,185,129,${0.5+pulse*0.4})`; glow = 'rgba(16,185,129,0.15)'; }
+      else if (this.threat) { color = `rgba(239,68,68,${0.6+pulse*0.35})`; glow = 'rgba(239,68,68,0.18)'; }
+      else                  { color = `rgba(96,165,250,${0.2+pulse*0.15})`; glow = null; }
+
+      if (glow) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r + 5 + pulse*3, 0, Math.PI*2);
+        ctx.fillStyle = glow;
+        ctx.fill();
+      }
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+  }
+
+  const nodes = Array.from({length: NODE_COUNT}, () => new Node());
+
+  let scanY   = 0;
+  let scanDir = 1;
+
+  function drawScanBeam() {
+    scanY += 0.7 * scanDir;
+    if (scanY > canvas.height || scanY < 0) scanDir *= -1;
+
+    const g = ctx.createLinearGradient(0, scanY - 40, 0, scanY + 6);
+    g.addColorStop(0, 'rgba(16,185,129,0)');
+    g.addColorStop(1, 'rgba(16,185,129,0.06)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, scanY - 40, canvas.width, 46);
+
+    ctx.beginPath();
+    ctx.moveTo(0, scanY);
+    ctx.lineTo(canvas.width, scanY);
+    ctx.strokeStyle = 'rgba(16,185,129,0.18)';
+    ctx.lineWidth   = 1;
+    ctx.stroke();
+  }
+
+  function drawLinks() {
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i+1; j < nodes.length; j++) {
+        const dx   = nodes[i].x - nodes[j].x;
+        const dy   = nodes[i].y - nodes[j].y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < LINK_DIST) {
+          const alpha   = (1 - dist/LINK_DIST) * 0.28;
+          const isThreat = nodes[i].threat || nodes[j].threat;
+          const isBlocked = (nodes[i].blocked || nodes[j].blocked) && isThreat;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = isBlocked
+            ? `rgba(16,185,129,${alpha})`
+            : isThreat
+              ? `rgba(239,68,68,${alpha*0.9})`
+              : `rgba(96,165,250,${alpha*0.55})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animateCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawScanBeam();
+    drawLinks();
+    nodes.forEach(n => { n.update(); n.draw(); });
+    requestAnimationFrame(animateCanvas);
+  }
+  animateCanvas();
+
+  /* ── 2. FLOATING DETECTION CHIPS ── */
+  const chipData = [
+    { type:'danger',  icon:'fa-triangle-exclamation', label:'PHISHING DETECTED'    },
+    { type:'safe',    icon:'fa-shield-halved',         label:'SCAM BLOCKED'         },
+    { type:'warning', icon:'fa-exclamation',           label:'SUSPICIOUS LINK'      },
+    { type:'safe',    icon:'fa-circle-check',          label:'THREAT NEUTRALIZED'   },
+    { type:'danger',  icon:'fa-fish',                  label:'PHISHING ATTEMPT'     },
+    { type:'info',    icon:'fa-magnifying-glass',      label:'SCANNING URL…'        },
+    { type:'safe',    icon:'fa-lock',                  label:'CONNECTION SECURED'   },
+    { type:'warning', icon:'fa-phone',                 label:'SCAM CALL FLAGGED'    },
+    { type:'danger',  icon:'fa-envelope',              label:'FAKE EMAIL DETECTED'  },
+    { type:'safe',    icon:'fa-user-shield',           label:'USER PROTECTED'       },
+    { type:'info',    icon:'fa-wifi',                  label:'NETWORK MONITORED'    },
+    { type:'warning', icon:'fa-sack-dollar',           label:'FRAUD ATTEMPT'        },
+    { type:'danger',  icon:'fa-mobile-screen-button',  label:'UPI FRAUD DETECTED'   },
+    { type:'safe',    icon:'fa-shield-halved',          label:'KYC SCAM BLOCKED'     },
+    { type:'warning', icon:'fa-qrcode',                 label:'FAKE QR CODE FLAGGED' },
+    { type:'danger',  icon:'fa-key',                    label:'OTP THEFT ATTEMPT'    },
+    { type:'safe',    icon:'fa-sim-card',               label:'SIM SWAP BLOCKED'     },
+    { type:'info',    icon:'fa-landmark',               label:'1930 ALERT FILED'     },
+  ];
+
+  const chipContainer = document.getElementById('heroChips');
+
+  function spawnChip() {
+    const d    = chipData[Math.floor(Math.random() * chipData.length)];
+    const el   = document.createElement('div');
+    el.className = `hero-chip ${d.type}`;
+    el.innerHTML = `<span class="chip-dot"></span><i class="fa-solid ${d.icon}" style="font-size:0.7rem;"></i>${d.label}`;
+    el.style.left   = Math.random() * 72 + '%';
+    el.style.bottom = (Math.random() * 30 + 5) + '%';
+    chipContainer.appendChild(el);
+    setTimeout(() => el.remove(), 5200);
+  }
+
+  // Initial burst then stagger
+  spawnChip(); spawnChip();
+  setInterval(spawnChip, 1800);
+
+  /* ── 3. FLOATING DATA FRAGMENTS ── */
+  const fragTexts = [
+    'http://amaz0n-login.tk', '+1-809-555-0198', 'RISK: 94/100',
+    'IRS_REFUND.exe', 'BLOCKED', '192.168.1.1',
+    'win-free-iphone.ml', 'SSN: ***-**-****', 'SCORE: 87',
+    'paypa1-secure.tk', '+1-900-555-1234', 'MALICIOUS DOMAIN',
+    'Your-acc-suspended.ga', 'GIFT CARD REQUEST', 'VERIFIED ✓',
+    'urgent-claim-now.xyz', 'CREDENTIAL THEFT', '0xDeadBeef',
+    // Indian context
+    'UPI: 9XXXXXXXX@ybl', '+91-98XXXXXXXX', '₹50,000 BLOCKED',
+    'KYC-update-sbi.tk', 'OTP: *** PROTECTED', 'PM-KISAN-claim.ga',
+    'AADHAAR-FRAUD', '1930 REPORTED', '₹2,99,000 SAVED',
+    'fake-paytm-kyc.ml', 'LOAN APP FLAGGED', 'SCORE: 91',
+  ];
+
+  const fragContainer = document.getElementById('heroFragments');
+
+  function spawnFrag() {
+    const text = fragTexts[Math.floor(Math.random() * fragTexts.length)];
+    const type = text.includes('BLOCKED') || text.includes('VERIFIED') || text.includes('✓')
+      ? 'frag-green'
+      : text.includes('SCORE') || text.includes('0x') || text.includes('RISK')
+        ? 'frag-blue'
+        : 'frag-red';
+    const el = document.createElement('div');
+    el.className = `hero-frag ${type}`;
+    el.textContent = text;
+    el.style.left   = Math.random() * 80 + '%';
+    el.style.bottom = (Math.random() * 25 + 5) + '%';
+    fragContainer.appendChild(el);
+    setTimeout(() => el.remove(), 7200);
+  }
+
+  spawnFrag();
+  setInterval(spawnFrag, 1400);
+
+})();
+</script>
+
+<!-- STATS BANNER -->
+<div class="stats-banner" id="statsBanner">
+  <div class="container">
+    <div class="grid grid-4">
+      <div class="stat-item">
+        <div class="stat-num" id="statReports">5,673</div>
+        <div class="stat-label">Scams Reported</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="statBlocked">50M+</div>
+        <div class="stat-label">People Warned</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="statUsers">3.1M+</div>
+        <div class="stat-label">Users Protected</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="statAlerts">50+</div>
+        <div class="stat-label">Active Alerts</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section section-light">
+  <div class="container">
+    <div class="section-title">
+      <h2>How ScamBandhKaro Protects You</h2>
+      <p>Four simple steps to stay ahead of online fraud</p>
+    </div>
+    <div class="grid grid-2" style="gap:1rem;">
+      <div class="how-step">
+        <div class="step-num">1</div>
+        <div>
+          <h4>Paste Suspicious Content</h4>
+          <p>Got a weird email, text, link, phone number? Paste it into our detection tools for instant analysis.</p>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">2</div>
+        <div>
+          <h4>AI Analysis Runs</h4>
+          <p>Our ML engine scans hundreds of scam indicators — keywords, patterns, domain structure, and more.</p>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">3</div>
+        <div>
+          <h4>Get Risk Score & Guidance</h4>
+          <p>Receive a 0-100 risk score, detected threats, and clear actionable recommendations.</p>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">4</div>
+        <div>
+          <h4>Report to Protect Others</h4>
+          <p>Submit confirmed scams to our community database, automatically alerting other users.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" style="background:var(--bg-darker);">
+  <div class="container">
+    <div class="section-title">
+      <h2>Comprehensive Protection Suite</h2>
+      <p>Everything you need to identify, avoid, and report scams</p>
+    </div>
+    <div class="feature-grid">
+      <a href="tools.html#message" class="card" style="text-decoration:none;">
+        <div class="icon-box green"><i class="fa-solid fa-message"></i></div>
+        <h3>Message Scanner</h3>
+        <p>Analyze SMS, email body text, or chat messages for scam language patterns, urgency triggers, and social engineering tactics.</p>
+        <div class="mt-2" style="color:var(--primary);font-size:0.9rem;font-weight:600;">Try it → </div>
+      </a>
+      <a href="tools.html#link" class="card" style="text-decoration:none;">
+        <div class="icon-box blue"><i class="fa-solid fa-link"></i></div>
+        <h3>Link Analyzer</h3>
+        <p>Check any URL for brand impersonation, suspicious domains, URL shorteners, missing HTTPS, and phishing indicators.</p>
+        <div class="mt-2" style="color:var(--primary);font-size:0.9rem;font-weight:600;">Try it → </div>
+      </a>
+      <a href="tools.html#phone" class="card" style="text-decoration:none;">
+        <div class="icon-box teal"><i class="fa-solid fa-phone"></i></div>
+        <h3>Phone Checker</h3>
+        <p>Look up phone numbers against known scam area codes, premium rate prefixes, and high-risk country codes.</p>
+        <div class="mt-2" style="color:var(--primary);font-size:0.9rem;font-weight:600;">Try it → </div>
+      </a>
+      <a href="tools.html#email" class="card" style="text-decoration:none;">
+        <div class="icon-box amber"><i class="fa-solid fa-envelope"></i></div>
+        <h3>Email Verifier</h3>
+        <p>Detect disposable email domains, brand typosquatting, suspicious TLDs, and other email-based scam indicators.</p>
+        <div class="mt-2" style="color:var(--primary);font-size:0.9rem;font-weight:600;">Try it → </div>
+      </a>
+      <a href="alerts.html" class="card" style="text-decoration:none;">
+        <div class="icon-box red"><i class="fa-solid fa-bell"></i></div>
+        <h3>Real-Time Alerts</h3>
+        <p>Stay informed about the latest scam campaigns with our community-powered alert feed, filtered by category and severity.</p>
+        <div class="mt-2" style="color:var(--primary);font-size:0.9rem;font-weight:600;">View alerts → </div>
+      </a>
+      <a href="report.html" class="card" style="text-decoration:none;">
+        <div class="icon-box purple"><i class="fa-solid fa-clipboard-list"></i></div>
+        <h3>Community Reporting</h3>
+        <p>Submit scams to our database, helping protect millions of users. Your reports are verified and added to our alert system.</p>
+        <div class="mt-2" style="color:var(--primary);font-size:0.9rem;font-weight:600;">Report now → </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- THREAT TYPES -->
+<section class="section section-light">
+  <div class="container">
+    <div class="section-title">
+      <h2>Threats We Detect</h2>
+      <p>Our engine covers the full spectrum of digital scams</p>
+    </div>
+    <div class="threat-grid">
+      <div class="threat-item">
+        <div class="threat-icon-wrap icon-box red"><i class="fa-solid fa-fish"></i></div>
+        <h4>Phishing</h4>
+        <p>Credential-stealing emails & fake login pages</p>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon-wrap icon-box amber"><i class="fa-solid fa-sack-dollar"></i></div>
+        <h4>Financial Fraud</h4>
+        <p>Wire transfers, gift card scams, fake invoices</p>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon-wrap icon-box blue"><i class="fa-solid fa-laptop"></i></div>
+        <h4>Tech Support</h4>
+        <p>Fake virus alerts, remote access scams</p>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon-wrap icon-box rose"><i class="fa-solid fa-heart-crack"></i></div>
+        <h4>Romance Scams</h4>
+        <p>Fake relationships, pig butchering, catfishing</p>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon-wrap icon-box purple"><i class="fa-solid fa-landmark"></i></div>
+        <h4>Gov. Impersonation</h4>
+        <p>Fake IRS, Social Security, police calls</p>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon-wrap icon-box orange"><i class="fa-solid fa-bitcoin-sign"></i></div>
+        <h4>Crypto Scams</h4>
+        <p>Fake exchanges, rug pulls, wallet drainers</p>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon-wrap icon-box teal"><i class="fa-solid fa-dice"></i></div>
+        <h4>Lottery/Prize</h4>
+        <p>Fake winnings, sweepstakes fraud</p>
+      </div>
+      <div class="threat-item">
+        <div class="threat-icon-wrap icon-box green"><i class="fa-solid fa-briefcase"></i></div>
+        <h4>Job Scams</h4>
+        <p>Fake listings, money mule recruitment</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST ALERTS PREVIEW -->
+<section class="section section-light">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h2 style="color:var(--light-text);">Latest Scam Alerts</h2>
+        <p style="color:var(--light-text-secondary);">Community-reported scams from the past 7 days</p>
+      </div>
+      <a href="alerts.html" class="btn btn-outline" style="color:var(--light-text);border-color:var(--light-border);">View All Alerts →</a>
+    </div>
+    <div id="homeAlertsList"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="container">
+    <h2>Don't Wait Until It's Too Late</h2>
+    <p>Join millions of people using ScamBandhKaro to protect themselves and their communities from online fraud.</p>
+    <div class="cta-actions">
+      <a href="tools.html" class="btn btn-primary btn-lg"><i class="fa-solid fa-magnifying-glass"></i> Scan Something Now</a>
+      <a href="signup.html" class="btn btn-outline btn-lg">Create Free Account</a>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="navbar-brand" style="margin-bottom:0.75rem;display:inline-flex;">
+          <div class="logo-icon" style="margin-right:10px;"><i class="fa-solid fa-shield-halved"></i></div> ScamBandhKaro
+        </a>
+        <p>Empowering communities with AI-powered scam detection, real-time alerts, and educational resources to fight digital fraud.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="alerts.html">Scam Alerts</a></li>
+          <li><a href="tools.html">Detection Tools</a></li>
+          <li><a href="report.html"><i class="fa-solid fa-flag"></i> Report a Scam</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="learn.html">Learn About Scams</a></li>
+          <li><a href="resources.html">Safety Resources</a></li>
+          <li><a href="news.html">News</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <ul>
+          <li><a href="mailto:help@scambandhkaro.com">help@scambandhkaro.com</a></li>
+          <li><a href="report.html">Submit a Report</a></li>
+          <li><a href="resources.html">Emergency Resources</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 ScamBandhKaro. All rights reserved. Built to protect communities.</p>
+      <p>Not a substitute for professional legal or financial advice.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script>
+  Storage.initializeData();
+
+  // Hamburger nav toggle
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // Load stats
+  const stats = Storage.getStats();
+  if (stats.totalReports) document.getElementById('statReports').textContent = stats.totalReports.toLocaleString();
+
+  // Animate stats
+  function animateCounter(el, target, duration = 1500) {
+    let start = 0;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { el.textContent = target.toLocaleString(); clearInterval(timer); }
+      else el.textContent = Math.floor(start).toLocaleString();
+    }, 16);
+  }
+
+  // Intersection Observer for stats
+  const statObs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      animateCounter(document.getElementById('statReports'), stats.totalReports || 5673);
+      statObs.disconnect();
+    }
+  });
+  statObs.observe(document.getElementById('statsBanner'));
+
+  // Hero scan box
+  document.getElementById('heroScanBtn').addEventListener('click', function(e) {
+    const val = document.getElementById('heroScanInput').value.trim();
+    if (val) {
+      sessionStorage.setItem('heroScanInput', val);
+    }
+  });
+
+  // Load latest 4 alerts
+  const alerts = Storage.getAlerts().slice(0, 4);
+  const list = document.getElementById('homeAlertsList');
+  if (alerts.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-bell" style="font-size:2.5rem;color:var(--text-muted);"></i></div><p>No alerts yet.</p></div>';
+  } else {
+    list.innerHTML = alerts.map(a => `
+      <div class="alert-card severity-${a.severity}" onclick="location.href='alerts.html'" style="cursor:pointer;">
+        <div class="alert-card-header">
+          <div>
+            <div class="alert-meta">
+              <span class="badge badge-${a.severity === 'high' ? 'danger' : a.severity === 'medium' ? 'warning' : 'info'}">${a.severity} risk</span>
+              <span class="badge badge-secondary">${a.category}</span>
+              ${a.verified ? '<span class="badge badge-safe">✓ Verified</span>' : ''}
+            </div>
+            <h4 style="margin-top:0.5rem;">${a.title}</h4>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="color:var(--danger);font-weight:700;font-size:1.1rem;">${a.reports.toLocaleString()}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);">reports</div>
+          </div>
+        </div>
+        <p style="font-size:0.9rem;">${a.description.substring(0, 160)}...</p>
+        <div class="alert-tags">${a.tags.slice(0,4).map(t => `<span class="alert-tag">${t}</span>`).join('')}</div>
+      </div>
+    `).join('');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — ScamBandhKaro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--bg-darker); }
+    .auth-card { width: 100%; max-width: 440px; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 2.5rem; }
+    .auth-logo { text-align: center; margin-bottom: 2rem; }
+    .auth-logo .logo-big { width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 0.75rem; }
+    .divider-text { display: flex; align-items: center; gap: 1rem; margin: 1.25rem 0; color: var(--text-muted); font-size: 0.85rem; }
+    .divider-text::before, .divider-text::after { content:''; flex:1; height:1px; background:var(--border-light); }
+    .social-btn { width: 100%; padding: 11px; background: var(--bg-darker); border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 0.92rem; font-family: inherit; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .social-btn:hover { border-color: var(--text-muted); color: var(--text-primary); }
+    .password-wrap { position: relative; }
+    .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
+    .strength-bar { height: 4px; border-radius: 4px; margin-top: 6px; transition: all 0.3s; }
+    .strength-text { font-size: 0.75rem; margin-top: 4px; }
+    .benefit-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
+    .benefit-item::before { content: '✓'; color: var(--primary); font-weight: 700; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="auth-page">
+  <div>
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-big"><i class="fa-solid fa-shield-halved" style="font-size:1.5rem;color:#fff;"></i></div>
+        <h2>Join ScamBandhKaro</h2>
+        <p>Free forever. No credit card required.</p>
+      </div>
+
+      <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-sm);padding:1rem;margin-bottom:1.5rem;">
+        <div class="benefit-item">Real-time scam alerts for your area</div>
+        <div class="benefit-item">Unlimited scam detection tool scans</div>
+        <div class="benefit-item">Personal scan history & saved reports</div>
+        <div class="benefit-item">Community reporting & alert contributions</div>
+      </div>
+
+      <button class="social-btn" onclick="showToast('Google sign-up coming soon!')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Sign up with Google
+      </button>
+
+      <div class="divider-text">or create an account</div>
+
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="John" required autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Doe" required autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="signupEmail" placeholder="you@example.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="password-wrap">
+            <input type="password" class="form-control" id="signupPassword" placeholder="Create a strong password"
+              required minlength="8" autocomplete="new-password" oninput="checkStrength(this.value)">
+            <button type="button" class="password-toggle" onclick="togglePassword('signupPassword', this)"><i class="fa-solid fa-eye"></i></button>
+          </div>
+          <div id="strengthBar" class="strength-bar" style="width:0%;background:var(--danger);"></div>
+          <div id="strengthText" class="strength-text" style="color:var(--text-muted);">Enter a password to see strength</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <div class="password-wrap">
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password"
+              required autocomplete="new-password">
+            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+
+        <label class="checkbox-opt" style="margin-bottom:1rem;">
+          <input type="checkbox" id="agreeTerms" style="accent-color:var(--primary);" required>
+          I agree to the <a href="#" onclick="event.preventDefault();showToast('Terms coming soon.')">Terms of Service</a> and <a href="#" onclick="event.preventDefault();showToast('Privacy policy coming soon.')">Privacy Policy</a>
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-lg w-full" id="signupBtn">Create Free Account</button>
+      </form>
+
+      <div id="signupError" class="hidden" style="margin-top:1rem;padding:0.75rem;background:rgba(239,68,68,0.1);border:1px solid var(--danger);border-radius:var(--radius-sm);color:var(--danger);font-size:0.88rem;text-align:center;"></div>
+
+      <div style="text-align:center;margin-top:1.25rem;font-size:0.88rem;color:var(--text-muted);">
+        Already have an account? <a href="login.html" style="font-weight:600;">Sign in →</a>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:1.25rem;">
+      <a href="index.html" style="font-size:0.85rem;color:var(--text-muted);">← Back to ScamBandhKaro</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePassword(id, btn) {
+    const inp = document.getElementById(id);
+    if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'; }
+    else { inp.type = 'password'; btn.innerHTML = '<i class="fa-solid fa-eye"></i>'; }
+  }
+
+  function checkStrength(password) {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    const bar = document.getElementById('strengthBar');
+    const text = document.getElementById('strengthText');
+    const pcts = ['0%', '25%', '50%', '75%', '90%', '100%'];
+    const colors = ['var(--danger)', 'var(--danger)', 'var(--warning)', 'var(--warning)', 'var(--safe)', 'var(--safe)'];
+    const labels = ['Too short', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+    const labelColors = ['var(--danger)', 'var(--danger)', 'var(--warning)', 'var(--warning)', 'var(--safe)', 'var(--safe)'];
+
+    bar.style.width = pcts[score];
+    bar.style.background = colors[score];
+    text.textContent = password ? labels[score] : 'Enter a password to see strength';
+    text.style.color = password ? labelColors[score] : 'var(--text-muted)';
+  }
+
+  function handleSignup(e) {
+    e.preventDefault();
+    const btn = document.getElementById('signupBtn');
+    const err = document.getElementById('signupError');
+
+    const password = document.getElementById('signupPassword').value;
+    const confirm = document.getElementById('confirmPassword').value;
+
+    if (password !== confirm) {
+      err.classList.remove('hidden');
+      err.textContent = 'Passwords do not match.';
+      return;
+    }
+
+    err.classList.add('hidden');
+    btn.textContent = 'Creating account...';
+    btn.disabled = true;
+
+    const userData = {
+      name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+      email: document.getElementById('signupEmail').value,
+      password: btoa(password),
+      createdAt: new Date().toISOString()
+    };
+
+    setTimeout(() => {
+      const users = JSON.parse(localStorage.getItem('scambandhkaro_users') || '[]');
+      if (users.find(u => u.email === userData.email)) {
+        err.classList.remove('hidden');
+        err.textContent = 'An account with this email already exists. Sign in instead.';
+        btn.textContent = 'Create Free Account';
+        btn.disabled = false;
+        return;
+      }
+      users.push(userData);
+      localStorage.setItem('scambandhkaro_users', JSON.stringify(users));
+      localStorage.setItem('scambandhkaro_session', JSON.stringify({ email: userData.email, name: userData.name, loggedIn: true }));
+      showToast('Account created! Welcome to ScamBandhKaro!');
+      setTimeout(() => location.href = 'index.html', 1500);
+    }, 800);
+  }
+
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3200);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News — ScamBandhKaro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .news-layout { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; }
+    @media (max-width: 900px) { .news-layout { grid-template-columns: 1fr; } }
+    .news-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem; transition: all 0.25s; }
+    .news-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--primary); }
+    .news-card-body { padding: 1.5rem; }
+    .news-card-img { width: 100%; height: 180px; background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card-light) 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+    .news-meta { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .news-date { font-size: 0.8rem; color: var(--text-muted); }
+    .news-excerpt { font-size: 0.92rem; color: var(--text-secondary); margin: 0.75rem 0; line-height: 1.65; }
+    .news-read-time { font-size: 0.78rem; color: var(--text-muted); }
+    .sidebar-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 1.5rem; }
+    .trending-item { display: flex; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light); }
+    .trending-item:last-child { border-bottom: none; }
+    .trending-num { font-size: 1.4rem; font-weight: 800; color: var(--primary); opacity: 0.5; width: 24px; flex-shrink: 0; }
+    .trending-title { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); line-height: 1.4; }
+    .trending-date { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+    .featured-card { background: linear-gradient(135deg, var(--bg-dark) 0%, #0f2018 100%); border: 1px solid rgba(16,185,129,0.3); border-radius: var(--radius); padding: 2.5rem; margin-bottom: 2rem; }
+    .featured-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; color: var(--primary); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>ScamBandhKaro</a>
+  <ul class="navbar-nav" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="learn.html">Learn</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="news.html" class="active">News</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+    <button class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-newspaper" style="color:var(--primary);margin-right:10px;"></i>Scam News & Updates</h1>
+    <p>The latest news on online fraud trends, law enforcement actions, and scam prevention tips from our editorial team.</p>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- Featured Article -->
+    <div class="featured-card">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span class="featured-badge"><i class="fa-solid fa-star" style="font-size:0.7rem;"></i> Featured Story</span>
+        <span class="badge badge-warning" style="font-size:0.7rem;"><i class="fa-solid fa-flag" style="font-size:0.65rem;"></i> India Alert</span>
+      </div>
+      <h2 style="margin-bottom:0.75rem;">UPI & Cyber Fraud Cost India ₹11,333 Crore in 2025 — MHA Report</h2>
+      <div class="news-meta">
+        <span class="badge badge-danger">UPI Fraud</span>
+        <span class="badge badge-warning">KYC Scam</span>
+        <span class="news-date">March 18, 2026</span>
+        <span class="news-read-time">7 min read</span>
+      </div>
+      <p class="news-excerpt">A Ministry of Home Affairs cybercrime report reveals India lost over ₹11,333 crore to online fraud in 2025 — with UPI payment fraud, fake KYC calls, and WhatsApp job scams as the top three categories. Over 1.2 million complaints were filed on the National Cyber Crime Reporting Portal (cybercrime.gov.in). The Cyber Crime Helpline 1930 received 7 lakh calls. Experts urge citizens to never share OTP, always verify QR codes, and report fraud within 24 hours for the best chance of recovery.</p>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
+        <a href="learn.html" class="btn btn-primary">Learn to Protect Yourself →</a>
+        <a href="resources.html" class="btn btn-outline">Indian Resources ↗</a>
+      </div>
+    </div>
+
+    <div class="news-layout">
+      <div>
+        <!-- News Articles -->
+        <div id="newsList"></div>
+      </div>
+
+      <div style="position:sticky;top:80px;display:flex;flex-direction:column;gap:1.25rem;">
+        <div class="sidebar-card">
+          <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-fire"></i> Trending Topics</h4>
+          <div id="trendingList"></div>
+        </div>
+
+        <div class="sidebar-card" style="background:rgba(16,185,129,0.05);border-color:rgba(16,185,129,0.2);">
+          <h4 style="color:var(--primary);margin-bottom:0.75rem;"><i class="fa-solid fa-bullhorn"></i> Stay Updated</h4>
+          <p style="font-size:0.88rem;margin-bottom:1rem;">Report cyber fraud to India's national helpline or get FTC scam alerts.</p>
+          <a href="https://cybercrime.gov.in" target="_blank" class="btn btn-primary btn-sm w-full" style="justify-content:center;margin-bottom:0.5rem;">cybercrime.gov.in ↗</a>
+          <a href="https://consumer.ftc.gov/scam-alerts" target="_blank" class="btn btn-outline btn-sm w-full" style="justify-content:center;">FTC Scam Alerts ↗</a>
+        </div>
+
+        <div class="sidebar-card">
+          <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-chart-bar"></i> 2025 Fraud Stats</h4>
+          <div style="margin-bottom:0.75rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:4px;">
+              <span>Imposter Scams</span><span style="color:var(--danger);font-weight:700;">$2.7B</span>
+            </div>
+            <div class="progress"><div class="progress-fill" style="width:85%;background:var(--danger);"></div></div>
+          </div>
+          <div style="margin-bottom:0.75rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:4px;">
+              <span>Crypto Scams</span><span style="color:var(--warning);font-weight:700;">$4.4B</span>
+            </div>
+            <div class="progress"><div class="progress-fill" style="width:100%;background:var(--warning);"></div></div>
+          </div>
+          <div style="margin-bottom:0.75rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:4px;">
+              <span>Online Shopping</span><span style="color:var(--info);font-weight:700;">$392M</span>
+            </div>
+            <div class="progress"><div class="progress-fill" style="width:40%;background:var(--info);"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:4px;">
+              <span>Business Email</span><span style="color:var(--primary);font-weight:700;">$2.9B</span>
+            </div>
+            <div class="progress"><div class="progress-fill" style="width:90%;"></div></div>
+          </div>
+          <div style="margin-bottom:0.75rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:4px;">
+              <span>India UPI Fraud</span><span style="color:#fb923c;font-weight:700;">₹11,333 Cr</span>
+            </div>
+            <div class="progress"><div class="progress-fill" style="width:75%;background:#fb923c;"></div></div>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.75rem;">Source: FBI IC3 2025 · MHA India Cybercrime Report</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="index.html" class="navbar-brand" style="margin-bottom:0.75rem;display:inline-flex;"><div class="logo-icon" style="margin-right:10px;"><i class="fa-solid fa-shield-halved"></i></div> ScamBandhKaro</a><p>Keeping you informed about the latest in digital fraud and online safety.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="alerts.html">Alerts</a></li><li><a href="tools.html">Tools</a></li><li><a href="report.html">Report</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="learn.html">Learn</a></li><li><a href="resources.html">Resources</a></li><li><a href="news.html">News</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:help@scambandhkaro.com">help@scambandhkaro.com</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 ScamBandhKaro. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script>
+  Storage.initializeData();
+  function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+  const articles = [
+    {
+      thumb: 'law', category: 'Law Enforcement', severity: 'info', date: 'March 17, 2026', readTime: '5 min read',
+      title: 'DOJ Charges 36 Individuals in International BEC Scam Ring',
+      excerpt: 'The Department of Justice announced charges against 36 defendants across seven countries for conducting business email compromise (BEC) scams that defrauded companies and individuals of more than $55 million. The scheme involved compromising business email accounts and redirecting wire transfers to attacker-controlled accounts.'
+    },
+    {
+      thumb: 'sms', category: 'Smishing', severity: 'warning', date: 'March 16, 2026', readTime: '4 min read',
+      title: 'FTC Warns of Surge in Package Delivery Text Scams',
+      excerpt: 'The Federal Trade Commission issued a consumer alert about a dramatic surge in smishing (SMS phishing) attacks impersonating FedEx, UPS, and USPS. Victims receive texts claiming their package is held and must pay a small "delivery fee" via a link that captures their full payment card details.'
+    },
+    {
+      thumb: 'ai', category: 'AI Scams', severity: 'danger', date: 'March 14, 2026', readTime: '6 min read',
+      title: 'AI Voice Cloning Used in Grandparent Scams Reaches New Heights',
+      excerpt: 'Consumer reports show a troubling rise in AI voice cloning technology being weaponized for grandparent scams. Fraudsters clone a grandchild\'s voice from social media videos and call grandparents claiming to be in jail, in an accident, or in danger — requesting emergency bail money.'
+    },
+    {
+      thumb: 'jobs', category: 'Employment', severity: 'warning', date: 'March 12, 2026', readTime: '5 min read',
+      title: 'LinkedIn Job Scams Target Young Professionals With Fake Offers',
+      excerpt: 'A sophisticated wave of fake job postings on LinkedIn is targeting recent graduates and career changers. The scams feature professional-looking listings for remote positions offering high salaries, then request equipment deposits or direct deposit information during a "pre-employment" process.'
+    },
+    {
+      thumb: 'realestate', category: 'Real Estate', severity: 'info', date: 'March 10, 2026', readTime: '4 min read',
+      title: 'Wire Fraud Targets Homebuyers in Record Numbers — FBI',
+      excerpt: 'The FBI\'s Internet Crime Complaint Center reports that real estate wire fraud — where buyers are tricked into wiring closing costs to scammer accounts — is at record highs, with over $500 million lost in 2025. Homebuyers should always confirm wiring instructions via phone before sending funds.'
+    },
+    {
+      thumb: 'social', category: 'Social Media', severity: 'info', date: 'March 8, 2026', readTime: '3 min read',
+      title: 'Celebrity Impersonation Giveaway Scams Dominate Instagram',
+      excerpt: 'Fraudulent accounts impersonating major celebrities and brands on Instagram are running fake "giveaways" at an unprecedented scale. Victims are asked to DM the account and send a small "processing fee" to receive prizes that never arrive. Meta has removed over 2 million such accounts this year.'
+    },
+
+    // ── INDIA-SPECIFIC NEWS ────────────────────────────────────────────
+    {
+      thumb: 'upi', category: 'UPI Fraud', severity: 'danger', date: 'March 18, 2026', readTime: '5 min read',
+      title: 'UPI QR Code Scam: Bengaluru Man Loses ₹8.7 Lakh After "Receiving" Payment',
+      excerpt: 'A Bengaluru software engineer lost ₹8.7 lakh after an OLX "buyer" sent a payment request QR code. The victim scanned it expecting to receive ₹15,000 for a laptop — and watched his account drain in seconds. NPCI data shows QR-code fraud complaints rose 340% in 2025. Rule: In UPI, scanning a QR code ALWAYS sends money — never receives it.'
+    },
+    {
+      thumb: 'india', category: 'KYC Scam', severity: 'danger', date: 'March 16, 2026', readTime: '4 min read',
+      title: 'Fake SBI/HDFC KYC Call Wave: 50,000 Victims Reported in February 2026',
+      excerpt: 'Cybercrime police across India reported 50,000+ KYC fraud cases in February alone. Callers impersonating SBI, HDFC, and Paytm agents warn of "account suspension" unless KYC is updated immediately. They ask victims to share OTP, download screen-sharing apps, or tap a "secure link" — handing over complete account control. Banks have confirmed: they NEVER ask for OTP over the phone.'
+    },
+    {
+      thumb: 'cyber', category: 'Loan App', severity: 'danger', date: 'March 14, 2026', readTime: '6 min read',
+      title: 'Predatory Loan Apps: RBI Bans 600 Illegal Apps; ED Arrests 22 in Crackdown',
+      excerpt: 'The Enforcement Directorate and cyber police jointly arrested 22 individuals linked to a network of 600+ illegal instant loan apps operating from shell companies. The apps charged up to 1,000% APR and extorted users with morphed photographs sent to their contacts. The RBI urges users to verify any lender at sachet.rbi.org.in before downloading a loan app.'
+    },
+    {
+      thumb: 'india', category: 'WhatsApp Scam', severity: 'warning', date: 'March 12, 2026', readTime: '4 min read',
+      title: '"Like & Earn" WhatsApp Job Scam Defrauds 2 Lakh Indians of ₹1,200 Crore',
+      excerpt: 'The "task fraud" scam — which lures victims with WhatsApp messages offering ₹500–2,000 for liking YouTube videos — has now defrauded an estimated 2 lakh Indians of over ₹1,200 crore in 2025–26. Initial small payments build trust before victims are asked to deposit ₹10,000–50,000 for "advanced tasks." Report such messages directly to 1930 or cybercrime.gov.in.'
+    }
+  ];
+
+  const trending = [
+    { title: 'AI Voice Cloning Scams — How to Protect Your Family', date: 'Mar 14' },
+    { title: 'New IRS Scam Using Real Taxpayer Data', date: 'Mar 13' },
+    { title: 'Crypto Recovery Scams: Don\'t Be Victimized Twice', date: 'Mar 11' },
+    { title: 'How to Freeze Your Credit — Step by Step Guide', date: 'Mar 9' },
+    { title: 'Dating App Safety: Avoiding Romance Scams in 2026', date: 'Mar 7' }
+  ];
+
+  const thumbIcons = {
+    law: '<i class="fa-solid fa-gavel"></i>',
+    sms: '<i class="fa-solid fa-mobile-screen-button"></i>',
+    ai: '<i class="fa-solid fa-robot"></i>',
+    jobs: '<i class="fa-solid fa-briefcase"></i>',
+    realestate: '<i class="fa-solid fa-house"></i>',
+    social: '<i class="fa-brands fa-instagram"></i>',
+    india: '<i class="fa-solid fa-shield-halved"></i>',
+    upi: '<i class="fa-solid fa-mobile-screen-button"></i>',
+    cyber: '<i class="fa-solid fa-bug-slash"></i>'
+  };
+  const thumbLabels = {
+    law: 'Law Enforcement', sms: 'Smishing', ai: 'AI Scams',
+    jobs: 'Employment', realestate: 'Real Estate', social: 'Social Media',
+    india: 'India Alert', upi: 'UPI Fraud', cyber: 'Cybercrime'
+  };
+
+  document.getElementById('newsList').innerHTML = articles.map(a => `
+    <div class="news-card">
+      <div class="news-thumb thumb-${a.thumb}">${thumbIcons[a.thumb] || ''}<span class="thumb-label">${thumbLabels[a.thumb] || a.category}</span></div>
+      <div class="news-card-body">
+        <div class="news-meta">
+          <span class="badge badge-${a.severity === 'danger' ? 'danger' : a.severity === 'warning' ? 'warning' : 'info'}">${a.category}</span>
+          <span class="news-date">${a.date}</span>
+          <span class="news-read-time"><i class="fa-regular fa-clock"></i> ${a.readTime}</span>
+        </div>
+        <h3 style="margin-bottom:0.5rem;">${a.title}</h3>
+        <p class="news-excerpt">${a.excerpt}</p>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
+          <a href="learn.html" class="btn btn-outline btn-sm">Learn More →</a>
+          <a href="tools.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Check with Tools</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('trendingList').innerHTML = trending.map((t, i) => `
+    <div class="trending-item">
+      <div class="trending-num">${i + 1}</div>
+      <div>
+        <div class="trending-title">${t.title}</div>
+        <div class="trending-date">${t.date}</div>
+      </div>
+    </div>
+  `).join('');
+</script>
+</body>
+</html>

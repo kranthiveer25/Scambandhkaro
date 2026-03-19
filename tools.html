@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scam Detection Tools — ScamBandhKaro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .tools-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+    @media (max-width: 768px) { .tools-layout { grid-template-columns: 1fr; } }
+    .tool-panel { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 2rem; }
+    .tool-panel h3 { margin-bottom: 0.5rem; }
+    .tool-panel > p { margin-bottom: 1.5rem; font-size: 0.9rem; }
+    .char-counter { font-size: 0.78rem; color: var(--text-muted); text-align: right; margin-top: 4px; }
+
+    /* Score display */
+    .result-score-row { display: flex; align-items: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .result-details { flex: 1; min-width: 200px; }
+    .result-risk-level { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .result-subtitle { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* Findings section */
+    .findings-title, .recs-title {
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-muted); font-weight: 600; margin-bottom: 0.75rem; margin-top: 1.25rem;
+    }
+    .finding-badge { font-size: 0.72rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; }
+
+    /* Stats grid */
+    .result-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.75rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light); }
+    .result-stat { text-align: center; }
+    .result-stat-val { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+    .result-stat-label { font-size: 0.72rem; color: var(--text-muted); }
+
+    /* Tips sidebar */
+    .tips-box { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2); border-radius: var(--radius); padding: 1.5rem; }
+    .tips-box h4 { color: var(--primary); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tip-item { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+    .tip-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .tip-text { font-size: 0.88rem; color: var(--text-secondary); }
+
+    /* History */
+    .history-item { background: var(--bg-darker); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; cursor: pointer; border: 1px solid var(--border-light); transition: all 0.2s; }
+    .history-item:hover { border-color: var(--primary); }
+    .history-item .history-text { font-size: 0.88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+
+    /* Analyze button state */
+    .btn-analyze { min-width: 120px; }
+    .btn-analyze.loading { pointer-events: none; opacity: 0.8; }
+
+    /* Tab icons */
+    .tab-btn .tab-icon { font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>ScamBandhKaro
+  </a>
+  <ul class="navbar-nav" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+    <li><a href="tools.html" class="active">Tools</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="learn.html">Learn</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="news.html">News</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+    <button class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-shield-virus" style="color:var(--primary);margin-right:10px;"></i>Scam Detection Tools</h1>
+    <p>AI-powered analysis for messages, links, phone numbers, and email addresses. Get an instant risk score and actionable guidance.</p>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- Tab Navigation -->
+    <div class="tab-list" style="margin-bottom:2rem;" id="toolTabs">
+      <button class="tab-btn active" onclick="switchTab('message')" id="tab-message">
+        <i class="fa-solid fa-message"></i> Message
+      </button>
+      <button class="tab-btn" onclick="switchTab('link')" id="tab-link">
+        <i class="fa-solid fa-link"></i> Link / URL
+      </button>
+      <button class="tab-btn" onclick="switchTab('phone')" id="tab-phone">
+        <i class="fa-solid fa-phone"></i> Phone Number
+      </button>
+      <button class="tab-btn" onclick="switchTab('email')" id="tab-email">
+        <i class="fa-solid fa-envelope"></i> Email Address
+      </button>
+    </div>
+
+    <!-- MESSAGE TAB -->
+    <div class="tab-content active" id="tab-content-message">
+      <div class="tools-layout">
+        <div>
+          <div class="tool-panel">
+            <h3><i class="fa-solid fa-message" style="color:var(--primary);margin-right:8px;"></i>Message Scanner</h3>
+            <p>Paste any suspicious SMS, email, or chat message to detect scam patterns, social engineering tactics, and phishing language.</p>
+            <div class="form-group">
+              <label class="form-label">Suspicious Message</label>
+              <textarea class="form-control" id="messageInput" rows="7"
+                placeholder="Paste the message here...&#10;&#10;Example: 'URGENT: Your bank account has been suspended. Click here immediately to verify: http://secure-bank-login.tk'"
+                oninput="updateCharCount('messageInput','messageCharCount')"></textarea>
+              <div class="char-counter"><span id="messageCharCount">0</span> characters</div>
+            </div>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-analyze" id="analyzeMessageBtn" onclick="runAnalysis('message')"><i class="fa-solid fa-magnifying-glass"></i> Analyze Message</button>
+              <button class="btn btn-outline btn-sm" onclick="loadExample('message')">Load Example</button>
+              <button class="btn btn-ghost btn-sm" onclick="clearTool('message')">Clear</button>
+            </div>
+          </div>
+
+          <div id="messageResult" class="hidden"></div>
+        </div>
+
+        <div>
+          <div class="tips-box">
+            <h4><i class="fa-solid fa-lightbulb"></i> Scam Message Red Flags</h4>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="tip-text"><strong>Urgency & Pressure:</strong> "Act now!", "Your account will be closed", "Respond immediately"</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-money-bill-wave"></i></div><div class="tip-text"><strong>Money Requests:</strong> Gift cards, wire transfer, Zelle, cryptocurrency — never sent to strangers</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-landmark"></i></div><div class="tip-text"><strong>Government Threats:</strong> IRS/SSA never demand immediate payment by phone or text</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-link"></i></div><div class="tip-text"><strong>Suspicious Links:</strong> Hover before clicking. Misspelled or strange domains are red flags</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-dice"></i></div><div class="tip-text"><strong>Prize Notifications:</strong> You can't win a contest you never entered</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-lock"></i></div><div class="tip-text"><strong>Personal Info Requests:</strong> SSN, passwords, PINs should never be shared via message</div></div>
+          </div>
+
+          <div class="mt-2">
+            <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-clock-rotate-left"></i> Recent Scans</h4>
+            <div id="messageHistory">
+              <div class="empty-state" style="padding:1.5rem;">
+                <div>No recent scans yet</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINK TAB -->
+    <div class="tab-content" id="tab-content-link">
+      <div class="tools-layout">
+        <div>
+          <div class="tool-panel">
+            <h3><i class="fa-solid fa-link" style="color:#60a5fa;margin-right:8px;"></i>Link / URL Analyzer</h3>
+            <p>Paste any URL or link to check for phishing, brand impersonation, dangerous domains, and malicious indicators.</p>
+            <div class="form-group">
+              <label class="form-label">Suspicious URL or Link</label>
+              <input type="text" class="form-control" id="linkInput"
+                placeholder="e.g. http://paypa1-secure-login.tk/verify/account"
+                style="font-family:monospace;font-size:0.9rem;">
+            </div>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-analyze" onclick="runAnalysis('link')"><i class="fa-solid fa-magnifying-glass"></i> Analyze Link</button>
+              <button class="btn btn-outline btn-sm" onclick="loadExample('link')">Load Example</button>
+              <button class="btn btn-ghost btn-sm" onclick="clearTool('link')">Clear</button>
+            </div>
+          </div>
+          <div id="linkResult" class="hidden"></div>
+        </div>
+        <div>
+          <div class="tips-box">
+            <h4><i class="fa-solid fa-lightbulb"></i> Suspicious URL Warning Signs</h4>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-lock"></i></div><div class="tip-text"><strong>No HTTPS:</strong> Never enter info on HTTP:// sites. Look for the padlock icon.</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-bullseye"></i></div><div class="tip-text"><strong>Brand Misspelling:</strong> "paypa1.com", "arnazon.com", "g00gle.com" are fakes</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-ruler"></i></div><div class="tip-text"><strong>URL Shorteners:</strong> bit.ly, tinyurl hide the real destination. Always expand first.</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-globe"></i></div><div class="tip-text"><strong>Free TLDs:</strong> .tk, .ml, .ga, .xyz — free domains used widely by scammers</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-hashtag"></i></div><div class="tip-text"><strong>IP as Domain:</strong> URLs like http://192.168.x.x are never legitimate businesses</div></div>
+          </div>
+          <div class="mt-2">
+            <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-clock-rotate-left"></i> Recent Scans</h4>
+            <div id="linkHistory"><div class="empty-state" style="padding:1.5rem;"><div>No recent scans yet</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHONE TAB -->
+    <div class="tab-content" id="tab-content-phone">
+      <div class="tools-layout">
+        <div>
+          <div class="tool-panel">
+            <h3><i class="fa-solid fa-phone" style="color:#2dd4bf;margin-right:8px;"></i>Phone Number Checker</h3>
+            <p>Check any phone number against scam area codes, premium rate prefixes, and high-risk country codes.</p>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="phoneInput"
+                placeholder="e.g. +1-809-555-0123 or (900) 555-1234">
+            </div>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-analyze" onclick="runAnalysis('phone')"><i class="fa-solid fa-magnifying-glass"></i> Check Number</button>
+              <button class="btn btn-outline btn-sm" onclick="loadExample('phone')">Load Example</button>
+              <button class="btn btn-ghost btn-sm" onclick="clearTool('phone')">Clear</button>
+            </div>
+          </div>
+          <div id="phoneResult" class="hidden"></div>
+        </div>
+        <div>
+          <div class="tips-box">
+            <h4><i class="fa-solid fa-lightbulb"></i> Scam Call Red Flags</h4>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-money-bills"></i></div><div class="tip-text"><strong>Premium Rate (+1-900):</strong> Calling back can incur charges of $20+ per minute</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-umbrella-beach"></i></div><div class="tip-text"><strong>Caribbean Area Codes:</strong> 268, 473, 809, 876 are common in "one-ring" scams</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-masks-theater"></i></div><div class="tip-text"><strong>Caller ID Spoofing:</strong> Scammers can fake any number including local or government numbers</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-bell-slash"></i></div><div class="tip-text"><strong>One-Ring Scams:</strong> Calls that ring once and disconnect want you to call back at your expense</div></div>
+          </div>
+          <div class="mt-2">
+            <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-clock-rotate-left"></i> Recent Scans</h4>
+            <div id="phoneHistory"><div class="empty-state" style="padding:1.5rem;"><div>No recent scans yet</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAIL TAB -->
+    <div class="tab-content" id="tab-content-email">
+      <div class="tools-layout">
+        <div>
+          <div class="tool-panel">
+            <h3><i class="fa-solid fa-envelope" style="color:#fbbf24;margin-right:8px;"></i>Email Address Verifier</h3>
+            <p>Detect disposable email addresses, brand impersonation domains, and other email-based fraud indicators.</p>
+            <div class="form-group">
+              <label class="form-label">Sender Email Address</label>
+              <input type="email" class="form-control" id="emailInput"
+                placeholder="e.g. security-alert@paypa1-support.tk">
+            </div>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-analyze" onclick="runAnalysis('email')"><i class="fa-solid fa-magnifying-glass"></i> Verify Email</button>
+              <button class="btn btn-outline btn-sm" onclick="loadExample('email')">Load Example</button>
+              <button class="btn btn-ghost btn-sm" onclick="clearTool('email')">Clear</button>
+            </div>
+          </div>
+          <div id="emailResult" class="hidden"></div>
+        </div>
+        <div>
+          <div class="tips-box">
+            <h4><i class="fa-solid fa-lightbulb"></i> Scam Email Indicators</h4>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-trash"></i></div><div class="tip-text"><strong>Disposable Domains:</strong> mailinator.com, guerrillamail.com, yopmail.com are never used by real companies</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-masks-theater"></i></div><div class="tip-text"><strong>Brand Impersonation:</strong> apple-support@icloud-security.tk — the real domain is apple.com</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-hashtag"></i></div><div class="tip-text"><strong>Random Numbers:</strong> security82736@gmail.com-ish patterns suggest auto-generated addresses</div></div>
+            <div class="tip-item"><div class="tip-icon"><i class="fa-solid fa-globe"></i></div><div class="tip-text"><strong>Free Suspicious TLDs:</strong> .tk, .ml, .ga in email domains are heavily abused by scammers</div></div>
+          </div>
+          <div class="mt-2">
+            <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-clock-rotate-left"></i> Recent Scans</h4>
+            <div id="emailHistory"><div class="empty-state" style="padding:1.5rem;"><div>No recent scans yet</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- REPORT PROMPT -->
+<div style="background:var(--bg-dark);border-top:1px solid var(--border-light);padding:2rem 0;">
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <h4>Found a scam? Help protect others.</h4>
+      <p style="font-size:0.9rem;">Submit confirmed scams to our community database to alert other users.</p>
+    </div>
+    <a href="report.html" class="btn btn-primary">Report a Scam →</a>
+  </div>
+</div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="navbar-brand" style="margin-bottom:0.75rem;display:inline-flex;">
+          <div class="logo-icon" style="margin-right:10px;"><i class="fa-solid fa-shield-halved"></i></div> ScamBandhKaro
+        </a>
+        <p>AI-powered scam detection tools to keep you safe online.</p>
+      </div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="alerts.html">Alerts</a></li><li><a href="tools.html">Tools</a></li><li><a href="report.html">Report</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="learn.html">Learn</a></li><li><a href="resources.html">Resources</a></li><li><a href="news.html">News</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:help@scambandhkaro.com">help@scambandhkaro.com</a></li><li><a href="report.html">Submit Report</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 ScamBandhKaro. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script src="js/scamDetector.js"></script>
+<script>
+  Storage.initializeData();
+  function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+  // ─── TAB SWITCHING ────────────────────────────────────────────────────────────
+  const tabs = ['message', 'link', 'phone', 'email'];
+
+  function switchTab(type) {
+    tabs.forEach(t => {
+      document.getElementById('tab-content-' + t).classList.remove('active');
+      document.getElementById('tab-' + t).classList.remove('active');
+    });
+    document.getElementById('tab-content-' + type).classList.add('active');
+    document.getElementById('tab-' + type).classList.add('active');
+    currentTab = type;
+  }
+
+  let currentTab = 'message';
+
+  // Check for hero scan input
+  const heroInput = sessionStorage.getItem('heroScanInput');
+  if (heroInput) {
+    sessionStorage.removeItem('heroScanInput');
+    // Detect type
+    if (heroInput.startsWith('http') || heroInput.includes('://')) {
+      switchTab('link');
+      document.getElementById('linkInput').value = heroInput;
+    } else if (heroInput.includes('@')) {
+      switchTab('email');
+      document.getElementById('emailInput').value = heroInput;
+    } else if (/^[\d\s\+\-\(\)]{7,}$/.test(heroInput)) {
+      switchTab('phone');
+      document.getElementById('phoneInput').value = heroInput;
+    } else {
+      document.getElementById('messageInput').value = heroInput;
+      updateCharCount('messageInput', 'messageCharCount');
+    }
+    setTimeout(() => runAnalysis(currentTab), 200);
+  }
+
+  // Check URL hash
+  const hash = location.hash.replace('#', '');
+  if (tabs.includes(hash)) switchTab(hash);
+
+  // ─── EXAMPLES ────────────────────────────────────────────────────────────────
+  const examples = {
+    message: `URGENT NOTICE: Your Amazon account has been SUSPENDED due to suspicious activity.
+
+Your recent order #112-9384726 has been flagged. You must verify your account within 24 HOURS or your account will be permanently terminated.
+
+Click here to verify NOW: http://amaz0n-security-verify.tk/account/confirm
+
+You may also need to pay a $4.99 reactivation fee via gift card to restore access. Call our support team at 1-900-555-0198 immediately.
+
+—Amazon Customer Security Team`,
+    link: 'http://paypa1-secure-account-verify.tk/login/confirm?user=victim&token=abc123&redirect=https://steal-credentials.ml',
+    phone: '+1-809-555-0123',
+    email: 'security-alert92847@paypa1-support.tk'
+  };
+
+  function loadExample(type) {
+    const input = getInput(type);
+    if (input) {
+      input.value = examples[type];
+      if (type === 'message') updateCharCount('messageInput', 'messageCharCount');
+    }
+  }
+
+  function clearTool(type) {
+    const input = getInput(type);
+    if (input) input.value = '';
+    document.getElementById(type + 'Result').classList.add('hidden');
+    if (type === 'message') document.getElementById('messageCharCount').textContent = '0';
+  }
+
+  function getInput(type) {
+    return document.getElementById(type + 'Input');
+  }
+
+  function updateCharCount(inputId, countId) {
+    document.getElementById(countId).textContent = document.getElementById(inputId).value.length;
+  }
+
+  // ─── HISTORY ─────────────────────────────────────────────────────────────────
+  const scanHistory = { message: [], link: [], phone: [], email: [] };
+
+  function addToHistory(type, input, score, riskLevel) {
+    const display = input.substring(0, 60) + (input.length > 60 ? '...' : '');
+    scanHistory[type].unshift({ input, display, score, riskLevel });
+    if (scanHistory[type].length > 5) scanHistory[type].pop();
+    renderHistory(type);
+  }
+
+  function renderHistory(type) {
+    const container = document.getElementById(type + 'History');
+    if (scanHistory[type].length === 0) {
+      container.innerHTML = '<div class="empty-state" style="padding:1.5rem;"><div>No recent scans yet</div></div>';
+      return;
+    }
+    container.innerHTML = scanHistory[type].map(h => {
+      const color = h.score >= 75 ? 'var(--danger)' : h.score >= 45 ? 'var(--warning)' : h.score >= 20 ? 'var(--info)' : 'var(--safe)';
+      return `<div class="history-item" onclick="loadHistoryItem('${type}', '${encodeURIComponent(h.input)}')">
+        <span class="history-text">${h.display}</span>
+        <span style="color:${color};font-weight:700;white-space:nowrap;">${h.score}/100</span>
+      </div>`;
+    }).join('');
+  }
+
+  function loadHistoryItem(type, encodedInput) {
+    const input = decodeURIComponent(encodedInput);
+    const el = getInput(type);
+    if (el) { el.value = input; if (type === 'message') updateCharCount('messageInput', 'messageCharCount'); }
+    runAnalysis(type);
+  }
+
+  // ─── MAIN ANALYSIS ────────────────────────────────────────────────────────────
+  function runAnalysis(type) {
+    const input = getInput(type);
+    if (!input) return;
+
+    const value = input.value.trim();
+    if (!value) {
+      showToast('Please enter content to analyze.', 'warning');
+      input.focus();
+      return;
+    }
+
+    // Show loading
+    const resultEl = document.getElementById(type + 'Result');
+    resultEl.classList.remove('hidden');
+    resultEl.innerHTML = '<div class="analysis-result"><div class="spinner"></div><p class="text-center mt-2" style="color:var(--text-muted);">Analyzing...</p></div>';
+
+    // Simulate processing delay for realism
+    setTimeout(() => {
+      const result = ScamDetector.analyze(type, value);
+      if (result.error) {
+        resultEl.innerHTML = `<div class="analysis-result"><div style="color:var(--danger);text-align:center;padding:1rem;"><i class="fa-solid fa-triangle-exclamation"></i> ${result.error}</div></div>`;
+        return;
+      }
+      renderResult(type, value, result, resultEl);
+      addToHistory(type, value, result.score, result.risk.level);
+    }, 600);
+  }
+
+  // ─── RENDER RESULT ────────────────────────────────────────────────────────────
+  function renderResult(type, input, result, container) {
+    const { score, risk, findings, recommendations, stats } = result;
+
+    const scoreColor = risk.color;
+    const meterColor = risk.color;
+
+    // Build findings HTML
+    const findingsHTML = findings.length === 0
+      ? '<p style="color:var(--text-muted);font-size:0.9rem;"><i class="fa-solid fa-circle-check" style="color:var(--safe);"></i> No suspicious indicators detected.</p>'
+      : findings.map(f => `
+          <div class="finding-item severity-${f.severity}">
+            <span class="finding-badge badge badge-${f.severity === 'high' ? 'danger' : f.severity === 'medium' ? 'warning' : 'info'}">${f.severity}</span>
+            <div>
+              <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);text-transform:capitalize;">${f.type.replace(/_/g,' ')}</div>
+              <div style="font-size:0.83rem;color:var(--text-secondary);">${Array.isArray(f.terms) ? f.terms.join(' · ') : f.detail || ''}</div>
+            </div>
+          </div>`).join('');
+
+    // Build stats HTML
+    let statsHTML = '';
+    if (stats) {
+      const statItems = Object.entries(stats)
+        .filter(([k, v]) => typeof v === 'number' || typeof v === 'boolean')
+        .slice(0, 4);
+      if (statItems.length > 0) {
+        statsHTML = `<div class="result-stats">${statItems.map(([k, v]) => `
+          <div class="result-stat">
+            <div class="result-stat-val">${typeof v === 'boolean' ? (v ? 'Yes' : 'No') : v}</div>
+            <div class="result-stat-label">${k.replace(/([A-Z])/g, ' $1').trim()}</div>
+          </div>`).join('')}</div>`;
+      }
+      // Add domain/specific stats as text
+      const strItems = Object.entries(stats).filter(([k,v]) => typeof v === 'string');
+      if (strItems.length > 0) {
+        statsHTML += `<div style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem;">${strItems.map(([k,v]) =>
+          `<span class="badge badge-secondary">${k}: <strong style="color:var(--text-primary)">${v}</strong></span>`
+        ).join('')}</div>`;
+      }
+    }
+
+    container.innerHTML = `
+      <div class="analysis-result">
+        <div class="result-score-row">
+          <div class="score-circle" style="border-color:${scoreColor};color:${scoreColor};">
+            <div class="score-num">${score}</div>
+            <div class="score-label">Risk Score</div>
+          </div>
+          <div class="result-details">
+            <div class="result-risk-level" style="color:${scoreColor};">${risk.level}</div>
+            <div class="result-subtitle">${getRiskDescription(score, type)}</div>
+            <div class="risk-meter mt-1">
+              <div class="risk-meter-fill" style="width:${score}%;background:${meterColor};"></div>
+            </div>
+          </div>
+        </div>
+
+        ${statsHTML}
+
+        <div class="findings-title"><i class="fa-solid fa-magnifying-glass"></i> Detected Indicators (${findings.length})</div>
+        ${findingsHTML}
+
+        <div class="recs-title"><i class="fa-solid fa-lightbulb"></i> Recommendations</div>
+        ${recommendations.map(r => `<div class="rec-item">${r}</div>`).join('')}
+
+        <div style="margin-top:1.25rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <a href="report.html" class="btn btn-outline btn-sm"><i class="fa-solid fa-clipboard-list"></i> Report this Scam</a>
+          <button class="btn btn-ghost btn-sm" onclick="copyResult(${score}, '${risk.level}')"><i class="fa-solid fa-copy"></i> Copy Results</button>
+        </div>
+      </div>`;
+  }
+
+  function getRiskDescription(score, type) {
+    if (score >= 75) return `High probability of scam — do not interact with this ${type}.`;
+    if (score >= 45) return `Multiple risk factors detected — proceed with extreme caution.`;
+    if (score >= 20) return `Some minor risk indicators found — verify before trusting.`;
+    return `No significant scam indicators found. Still verify the source independently.`;
+  }
+
+  function copyResult(score, level) {
+    const text = `ScamBandhKaro Analysis Result\nRisk Score: ${score}/100\nRisk Level: ${level}\nGenerated: ${new Date().toLocaleString()}`;
+    navigator.clipboard.writeText(text).then(() => showToast('Results copied to clipboard!'));
+  }
+
+  // ─── TOAST ────────────────────────────────────────────────────────────────────
+  function showToast(msg, type = 'success') {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.style.borderColor = type === 'warning' ? 'var(--warning)' : 'var(--primary)';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3200);
+  }
+
+  // Enter key support
+  ['linkInput', 'phoneInput', 'emailInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') runAnalysis(currentTab);
+    });
+  });
+</script>
+</body>
+</html>

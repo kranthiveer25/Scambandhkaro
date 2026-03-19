@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scam Alerts — ScamBandhKaro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .alerts-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
+    @media (max-width: 900px) { .alerts-layout { grid-template-columns: 1fr; } }
+    .filter-panel { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 1.5rem; position: sticky; top: 80px; }
+    .filter-panel h4 { margin-bottom: 1.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+    .filter-option { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.9rem; color: var(--text-secondary); transition: all 0.2s; }
+    .filter-option:hover { background: var(--bg-darker); color: var(--text-primary); }
+    .filter-option.active { background: rgba(16,185,129,0.1); color: var(--primary); font-weight: 600; }
+    .filter-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .alert-count-badge { margin-left: auto; background: var(--bg-darker); color: var(--text-muted); padding: 2px 8px; border-radius: 20px; font-size: 0.75rem; }
+    .alerts-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+    .alert-detail-panel { background: var(--bg-card); border: 1px solid var(--primary); border-radius: var(--radius); padding: 2rem; margin-bottom: 1rem; animation: fadeSlide 0.3s ease; }
+    .alert-regions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+    .region-badge { padding: 3px 10px; background: rgba(59,130,246,0.1); color: var(--info); border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+    .sort-select { padding: 7px 12px; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 0.85rem; font-family: inherit; cursor: pointer; }
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 20px; color: var(--danger); font-size: 0.8rem; font-weight: 600; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--danger); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>ScamBandhKaro</a>
+  <ul class="navbar-nav" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="alerts.html" class="active">Alerts</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="learn.html">Learn</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="news.html">News</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+    <button class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+      <h1><i class="fa-solid fa-bell" style="color:var(--primary);margin-right:10px;"></i>Scam Alerts</h1>
+      <span class="live-badge"><span class="live-dot"></span>Live Feed</span>
+    </div>
+    <p>Community-verified scam reports and active fraud campaigns. Updated in real-time by our global network.</p>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- Search Bar -->
+    <div class="filter-bar" style="margin-bottom:2rem;">
+      <input type="text" class="form-control" id="searchInput" placeholder="🔍 Search alerts by keyword, category, or tag..." oninput="filterAlerts()">
+      <select class="sort-select" id="sortSelect" onchange="filterAlerts()">
+        <option value="date">Sort: Newest First</option>
+        <option value="reports">Sort: Most Reported</option>
+        <option value="severity">Sort: Highest Risk</option>
+      </select>
+    </div>
+
+    <div class="alerts-layout">
+
+      <!-- FILTER SIDEBAR -->
+      <div class="filter-panel">
+        <h4>Filter by Severity</h4>
+        <div class="filter-option active" onclick="setSeverity('')" id="sev-all">
+          <span class="filter-dot" style="background:var(--text-muted);"></span> All Severities
+          <span class="alert-count-badge" id="cnt-all">0</span>
+        </div>
+        <div class="filter-option" onclick="setSeverity('high')" id="sev-high">
+          <span class="filter-dot" style="background:var(--danger);"></span> High Risk
+          <span class="alert-count-badge" id="cnt-high">0</span>
+        </div>
+        <div class="filter-option" onclick="setSeverity('medium')" id="sev-medium">
+          <span class="filter-dot" style="background:var(--warning);"></span> Medium Risk
+          <span class="alert-count-badge" id="cnt-medium">0</span>
+        </div>
+        <div class="filter-option" onclick="setSeverity('low')" id="sev-low">
+          <span class="filter-dot" style="background:var(--info);"></span> Low Risk
+          <span class="alert-count-badge" id="cnt-low">0</span>
+        </div>
+
+        <hr class="divider">
+        <h4>Filter by Category</h4>
+        <div id="categoryFilters"></div>
+
+        <hr class="divider">
+        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-sm);padding:1rem;">
+          <h4 style="color:var(--primary);margin-bottom:0.5rem;">Know a new scam?</h4>
+          <p style="font-size:0.85rem;margin-bottom:0.75rem;">Help protect the community by reporting it.</p>
+          <a href="report.html" class="btn btn-primary btn-sm w-full" style="justify-content:center;">Report Scam</a>
+        </div>
+      </div>
+
+      <!-- ALERTS LIST -->
+      <div>
+        <div class="alerts-header">
+          <div id="alertsCount" style="color:var(--text-muted);font-size:0.9rem;">Loading...</div>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text-secondary);cursor:pointer;">
+            <input type="checkbox" id="verifiedOnly" onchange="filterAlerts()" style="accent-color:var(--primary);">
+            Verified only
+          </label>
+        </div>
+        <div id="alertsList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="index.html" class="navbar-brand" style="margin-bottom:0.75rem;display:inline-flex;"><div class="logo-icon" style="margin-right:10px;"><i class="fa-solid fa-shield-halved"></i></div> ScamBandhKaro</a><p>Community-powered scam alert network protecting millions worldwide.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="alerts.html">Alerts</a></li><li><a href="tools.html">Tools</a></li><li><a href="report.html">Report</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="learn.html">Learn</a></li><li><a href="resources.html">Resources</a></li><li><a href="news.html">News</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:help@scambandhkaro.com">help@scambandhkaro.com</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 ScamBandhKaro. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script>
+  Storage.initializeData();
+  function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+  let currentSeverity = '';
+  let currentCategory = '';
+
+  function setSeverity(sev) {
+    currentSeverity = sev;
+    document.querySelectorAll('[id^="sev-"]').forEach(el => el.classList.remove('active'));
+    document.getElementById('sev-' + (sev || 'all')).classList.add('active');
+    filterAlerts();
+  }
+
+  function setCategory(cat) {
+    currentCategory = cat;
+    document.querySelectorAll('[id^="cat-"]').forEach(el => el.classList.remove('active'));
+    document.getElementById('cat-' + (cat || 'all')).classList.add('active');
+    filterAlerts();
+  }
+
+  function filterAlerts() {
+    const search = document.getElementById('searchInput').value;
+    const sort = document.getElementById('sortSelect').value;
+    const verifiedOnly = document.getElementById('verifiedOnly').checked;
+
+    let alerts = Storage.getAlerts({
+      severity: currentSeverity,
+      category: currentCategory,
+      search
+    });
+
+    if (verifiedOnly) alerts = alerts.filter(a => a.verified);
+
+    // Sort
+    if (sort === 'reports') alerts.sort((a, b) => b.reports - a.reports);
+    else if (sort === 'severity') {
+      const order = { high: 0, medium: 1, low: 2 };
+      alerts.sort((a, b) => (order[a.severity] || 2) - (order[b.severity] || 2));
+    }
+
+    renderAlerts(alerts);
+  }
+
+  function renderAlerts(alerts) {
+    document.getElementById('alertsCount').textContent = `Showing ${alerts.length} alert${alerts.length !== 1 ? 's' : ''}`;
+    const list = document.getElementById('alertsList');
+
+    if (alerts.length === 0) {
+      list.innerHTML = `<div class="empty-state">
+        <div class="empty-icon"><i class="fa-solid fa-bell" style="font-size:2.5rem;color:var(--text-muted);"></i></div>
+        <h3>No alerts match your filters</h3>
+        <p>Try adjusting your search or filter criteria.</p>
+      </div>`;
+      return;
+    }
+
+    list.innerHTML = alerts.map(a => `
+      <div class="alert-card severity-${a.severity}" style="cursor:pointer;" onclick="toggleAlertDetail(${a.id})">
+        <div class="alert-card-header">
+          <div style="flex:1;">
+            <div class="alert-meta">
+              <span class="badge badge-${a.severity === 'high' ? 'danger' : a.severity === 'medium' ? 'warning' : 'info'}">${a.severity} risk</span>
+              <span class="badge badge-secondary">${a.category}</span>
+              ${a.verified ? '<span class="badge badge-safe">✓ Verified</span>' : '<span class="badge badge-secondary">Unverified</span>'}
+              <span style="color:var(--text-muted);font-size:0.8rem;">${a.date}</span>
+            </div>
+            <h3 style="margin-top:0.5rem;font-size:1.05rem;">${a.title}</h3>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:1.4rem;font-weight:800;color:${a.severity === 'high' ? 'var(--danger)' : a.severity === 'medium' ? 'var(--warning)' : 'var(--info)'};">${a.reports.toLocaleString()}</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);">Reports</div>
+          </div>
+        </div>
+        <p style="font-size:0.9rem;margin-bottom:0.75rem;">${a.description}</p>
+        <div class="alert-tags">${a.tags.map(t => `<span class="alert-tag">${t}</span>`).join('')}</div>
+        <div style="margin-top:0.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+          <div class="alert-regions">${(a.affectedRegions || []).map(r => `<span class="region-badge"><i class="fa-solid fa-location-dot"></i> ${r}</span>`).join('')}</div>
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();analyzeThis(${a.id})"><i class="fa-solid fa-magnifying-glass"></i> Analyze</button>
+        </div>
+      </div>
+      <div class="alert-detail-panel hidden" id="detail-${a.id}">
+        <h4 style="margin-bottom:0.75rem;"><i class="fa-solid fa-clipboard-list"></i> Full Alert Details</h4>
+        <p style="margin-bottom:1rem;">${a.description}</p>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <a href="tools.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Use Detection Tools</a>
+          <a href="report.html" class="btn btn-outline btn-sm"><i class="fa-solid fa-file-pen"></i> Add Your Report</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleAlertDetail(id) {
+    const detail = document.getElementById('detail-' + id);
+    detail.classList.toggle('hidden');
+  }
+
+  function analyzeThis(id) {
+    location.href = 'tools.html';
+  }
+
+  function buildCategoryFilters() {
+    const allAlerts = Storage.getAlerts();
+    const categories = [...new Set(allAlerts.map(a => a.category))];
+    const counts = {};
+    allAlerts.forEach(a => counts[a.category] = (counts[a.category] || 0) + 1);
+    const sev = (sev) => ({ high: 'var(--danger)', medium: 'var(--warning)', low: 'var(--info)' }[sev] || 'var(--text-muted)');
+
+    // Count by severity
+    const high = allAlerts.filter(a => a.severity === 'high').length;
+    const medium = allAlerts.filter(a => a.severity === 'medium').length;
+    const low = allAlerts.filter(a => a.severity === 'low').length;
+    document.getElementById('cnt-all').textContent = allAlerts.length;
+    document.getElementById('cnt-high').textContent = high;
+    document.getElementById('cnt-medium').textContent = medium;
+    document.getElementById('cnt-low').textContent = low;
+
+    // Category filters
+    const container = document.getElementById('categoryFilters');
+    const allCatOpt = `<div class="filter-option active" onclick="setCategory('')" id="cat-all">All Categories<span class="alert-count-badge">${allAlerts.length}</span></div>`;
+    const catOpts = categories.map(c =>
+      `<div class="filter-option" onclick="setCategory('${c}')" id="cat-${c}">
+        ${c} <span class="alert-count-badge">${counts[c]}</span>
+      </div>`).join('');
+    container.innerHTML = allCatOpt + catOpts;
+  }
+
+  // Initialize
+  buildCategoryFilters();
+  filterAlerts();
+</script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report a Scam — ScamBandhKaro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .report-layout { display: grid; grid-template-columns: 1fr 360px; gap: 2rem; align-items: start; }
+    @media (max-width: 900px) { .report-layout { grid-template-columns: 1fr; } }
+    .report-form { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 2rem; }
+    .form-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); }
+    .form-section:last-of-type { border-bottom: none; margin-bottom: 0; }
+    .form-section-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); font-weight: 700; margin-bottom: 1.25rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .optional-label { color: var(--text-muted); font-weight: 400; font-size: 0.75rem; }
+    .severity-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+    .severity-opt { border: 2px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .severity-opt:hover { border-color: var(--text-muted); }
+    .severity-opt.selected { border-color: var(--primary); background: rgba(16,185,129,0.08); }
+    .severity-opt .sev-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .severity-opt .sev-label { font-size: 0.82rem; font-weight: 600; }
+    .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .checkbox-opt { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.88rem; }
+    .checkbox-opt:hover { background: var(--bg-darker); }
+    .checkbox-opt input { accent-color: var(--primary); }
+
+    /* Success state */
+    .success-panel { background: rgba(16,185,129,0.06); border: 1.5px solid rgba(16,185,129,0.3); border-radius: var(--radius); padding: 2.5rem; text-align: center; animation: fadeSlide 0.4s ease; }
+    .success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .success-id { background: var(--bg-darker); border-radius: var(--radius-sm); padding: 0.75rem 1.25rem; display: inline-block; font-family: monospace; font-size: 1.1rem; color: var(--primary); margin: 1rem 0; }
+
+    /* Recent reports */
+    .recent-report { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 0.75rem; }
+    .recent-report h5 { font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .recent-report .report-meta { font-size: 0.78rem; color: var(--text-muted); }
+    .status-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+    .status-under-review { background: rgba(245,158,11,0.1); color: var(--warning); }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>ScamBandhKaro</a>
+  <ul class="navbar-nav" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="report.html" class="active">Report</a></li>
+    <li><a href="learn.html">Learn</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="news.html">News</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+    <button class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-flag" style="color:var(--primary);margin-right:10px;"></i>Report a Scam</h1>
+    <p>Help protect millions by reporting scams you've encountered. Your report is added to our community alert database and helps train our detection models.</p>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="report-layout">
+
+      <!-- REPORT FORM -->
+      <div>
+        <div class="report-form" id="reportFormPanel">
+          <form id="reportForm" onsubmit="submitReport(event)">
+
+            <!-- Incident Details -->
+            <div class="form-section">
+              <div class="form-section-title"><i class="fa-solid fa-clipboard-list" style="margin-right:6px;color:var(--primary);"></i>Incident Details</div>
+              <div class="form-group">
+                <label class="form-label">Scam Title / Subject <span style="color:var(--danger);">*</span></label>
+                <input type="text" class="form-control" id="reportTitle" placeholder="e.g. Fake Amazon order cancellation email" required maxlength="120">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Scam Category <span style="color:var(--danger);">*</span></label>
+                  <select class="form-control" id="reportCategory" required>
+                    <option value="">Select category...</option>
+                    <option>Phishing</option>
+                    <option>Tech Support</option>
+                    <option>Investment / Crypto</option>
+                    <option>Romance Scam</option>
+                    <option>Government Impersonation</option>
+                    <option>Lottery / Prize</option>
+                    <option>Job Scam</option>
+                    <option>Banking / Financial</option>
+                    <option>Delivery / Package</option>
+                    <option>Rental / Real Estate</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Date of Incident <span style="color:var(--danger);">*</span></label>
+                  <input type="date" class="form-control" id="reportDate" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">How were you contacted? <span style="color:var(--danger);">*</span></label>
+                <select class="form-control" id="reportMethod" required>
+                  <option value="">Select contact method...</option>
+                  <option>Email</option>
+                  <option>Phone Call</option>
+                  <option>Text Message (SMS)</option>
+                  <option>Social Media Direct Message</option>
+                  <option>Website / Pop-up</option>
+                  <option>Dating App</option>
+                  <option>Letter / Mail</option>
+                  <option>In Person</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Describe What Happened <span style="color:var(--danger);">*</span></label>
+                <textarea class="form-control" id="reportDescription" rows="5" required
+                  placeholder="Describe the scam in detail. What did they say? What did they ask for? What happened?"></textarea>
+              </div>
+            </div>
+
+            <!-- Severity -->
+            <div class="form-section">
+              <div class="form-section-title"><i class="fa-solid fa-bolt" style="margin-right:6px;color:var(--warning);"></i>Incident Severity</div>
+              <div class="severity-options" id="severityOptions">
+                <div class="severity-opt" onclick="selectSeverity('low')">
+                  <div class="sev-icon"><i class="fa-solid fa-circle" style="color:var(--info);"></i></div>
+                  <div class="sev-label" style="color:var(--info);">Low Risk</div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);">No money lost</div>
+                </div>
+                <div class="severity-opt selected" onclick="selectSeverity('medium')">
+                  <div class="sev-icon"><i class="fa-solid fa-circle" style="color:var(--warning);"></i></div>
+                  <div class="sev-label" style="color:var(--warning);">Medium Risk</div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);">Attempted fraud</div>
+                </div>
+                <div class="severity-opt" onclick="selectSeverity('high')">
+                  <div class="sev-icon"><i class="fa-solid fa-circle" style="color:var(--danger);"></i></div>
+                  <div class="sev-label" style="color:var(--danger);">High Risk</div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);">Money/data lost</div>
+                </div>
+              </div>
+              <input type="hidden" id="reportSeverity" value="medium">
+            </div>
+
+            <!-- Financial Impact -->
+            <div class="form-section">
+              <div class="form-section-title"><i class="fa-solid fa-sack-dollar" style="margin-right:6px;color:var(--safe);"></i>Financial Impact <span class="optional-label">(optional)</span></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Amount Lost (USD)</label>
+                  <input type="number" class="form-control" id="reportAmount" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Payment Method Used</label>
+                  <select class="form-control" id="reportPayment">
+                    <option value="">N/A</option>
+                    <option>Wire Transfer</option>
+                    <option>Gift Card</option>
+                    <option>Cryptocurrency</option>
+                    <option>Zelle / Cash App</option>
+                    <option>Credit Card</option>
+                    <option>Bank Transfer</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scammer Info -->
+            <div class="form-section">
+              <div class="form-section-title"><i class="fa-solid fa-user-secret" style="margin-right:6px;color:var(--danger);"></i>Scammer Information <span class="optional-label">(optional — helps catch them)</span></div>
+              <div class="form-group">
+                <label class="form-label">Scammer Phone Number</label>
+                <input type="text" class="form-control" id="reportScamPhone" placeholder="e.g. +1-809-555-0123">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Scammer Email Address</label>
+                <input type="email" class="form-control" id="reportScamEmail" placeholder="e.g. irs-agent@secure-tax.tk">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Scam Website / URL</label>
+                <input type="url" class="form-control" id="reportScamUrl" placeholder="e.g. http://fake-bank-login.tk">
+              </div>
+            </div>
+
+            <!-- Flags -->
+            <div class="form-section">
+              <div class="form-section-title"><i class="fa-solid fa-list-check" style="margin-right:6px;color:var(--primary);"></i>What Was Involved?</div>
+              <div class="checkbox-grid">
+                <label class="checkbox-opt"><input type="checkbox" name="flags" value="money_requested"> Money requested</label>
+                <label class="checkbox-opt"><input type="checkbox" name="flags" value="personal_info_requested"> Personal info requested</label>
+                <label class="checkbox-opt"><input type="checkbox" name="flags" value="gift_cards"> Gift cards mentioned</label>
+                <label class="checkbox-opt"><input type="checkbox" name="flags" value="remote_access"> Remote access requested</label>
+                <label class="checkbox-opt"><input type="checkbox" name="flags" value="urgency_threats"> Urgency or threats used</label>
+                <label class="checkbox-opt"><input type="checkbox" name="flags" value="impersonation"> Brand/gov impersonation</label>
+                <label class="checkbox-opt"><input type="checkbox" name="flags" value="fake_website"> Fake website involved</label>
+                <label class="checkbox-opt"><input type="checkbox" name="flags" value="money_lost"> I lost money</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-full" id="submitBtn">
+              <i class="fa-solid fa-paper-plane"></i> Submit Report
+            </button>
+            <p style="font-size:0.8rem;color:var(--text-muted);text-align:center;margin-top:0.75rem;">
+              Your report is anonymous. By submitting, you help protect millions of users.
+            </p>
+          </form>
+        </div>
+
+        <!-- Success State (hidden) -->
+        <div class="success-panel hidden" id="successPanel">
+          <div class="success-icon"><i class="fa-solid fa-circle-check" style="font-size:3.5rem;color:var(--primary);"></i></div>
+          <h2>Report Submitted!</h2>
+          <p>Thank you for helping protect the community. Your report has been received and will be reviewed by our team.</p>
+          <div class="success-id" id="reportId">SNR-XXXXXX</div>
+          <p style="font-size:0.88rem;margin-bottom:1.5rem;">Save this report ID for your records.</p>
+          <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="resetForm()">Submit Another Report</button>
+            <a href="alerts.html" class="btn btn-outline">View Scam Alerts</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div>
+        <div class="tips-box" style="margin-bottom:1.5rem;">
+          <h4><i class="fa-solid fa-lightbulb"></i> Before You Submit</h4>
+          <div style="font-size:0.88rem;color:var(--text-secondary);">
+            <p style="margin-bottom:0.75rem;"><i class="fa-solid fa-circle-check" style="color:var(--safe);"></i> Do not include your own personal financial information (account numbers, SSN, etc.)</p>
+            <p style="margin-bottom:0.75rem;"><i class="fa-solid fa-circle-check" style="color:var(--safe);"></i> Include as much detail as possible about the scammer — phone, email, and URLs help law enforcement</p>
+            <p style="margin-bottom:0.75rem;"><i class="fa-solid fa-circle-check" style="color:var(--safe);"></i> If you lost money, also report to the FTC at <strong>ReportFraud.ftc.gov</strong></p>
+            <p><i class="fa-solid fa-circle-check" style="color:var(--safe);"></i> For crypto scams, report to the FBI at <strong>ic3.gov</strong></p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:1.5rem;">
+          <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-circle-exclamation" style="color:var(--danger);margin-right:6px;"></i>Emergency Resources</h4>
+          <div style="font-size:0.88rem;color:var(--text-secondary);">
+
+            <!-- India -->
+            <div style="padding:0.6rem 0.75rem;border-radius:6px;background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);margin-bottom:0.75rem;">
+              <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#fb923c;font-weight:700;margin-bottom:0.4rem;"><i class="fa-solid fa-flag" style="margin-right:4px;"></i>India</div>
+              <p style="margin-bottom:0.4rem;"><strong style="color:var(--text-primary);">Cyber Helpline</strong> &nbsp;<span style="color:var(--primary);font-weight:700;">1930</span></p>
+              <p style="margin-bottom:0.4rem;"><strong style="color:var(--text-primary);">Cybercrime Portal</strong><br><a href="https://cybercrime.gov.in" target="_blank" style="color:var(--primary);">cybercrime.gov.in</a></p>
+              <p style="margin-bottom:0.4rem;"><strong style="color:var(--text-primary);">RBI SACHET (Loan Fraud)</strong><br><a href="https://sachet.rbi.org.in" target="_blank" style="color:var(--primary);">sachet.rbi.org.in</a></p>
+              <p><strong style="color:var(--text-primary);">Sanchar Saathi (SIM Fraud)</strong><br><a href="https://sancharsaathi.gov.in" target="_blank" style="color:var(--primary);">sancharsaathi.gov.in</a></p>
+            </div>
+
+            <!-- International -->
+            <div style="padding:0.6rem 0.75rem;border-radius:6px;background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.15);">
+              <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#60a5fa;font-weight:700;margin-bottom:0.4rem;"><i class="fa-solid fa-globe" style="margin-right:4px;"></i>International</div>
+              <p style="margin-bottom:0.4rem;"><strong style="color:var(--text-primary);">FTC Fraud Report</strong><br><a href="https://reportfraud.ftc.gov" target="_blank" style="color:var(--primary);">reportfraud.ftc.gov</a></p>
+              <p style="margin-bottom:0.4rem;"><strong style="color:var(--text-primary);">FBI IC3</strong><br><a href="https://ic3.gov" target="_blank" style="color:var(--primary);">ic3.gov</a></p>
+              <p><strong style="color:var(--text-primary);">AARP Fraud Helpline</strong><br>1-877-908-3360</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="margin-bottom:1rem;"><i class="fa-solid fa-clipboard-list"></i> Recent Community Reports</h4>
+          <div id="recentReports">
+            <div class="empty-state" style="padding:1rem;">
+              <p style="font-size:0.85rem;">No reports submitted yet. Be the first!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="index.html" class="navbar-brand" style="margin-bottom:0.75rem;display:inline-flex;"><div class="logo-icon" style="margin-right:10px;"><i class="fa-solid fa-shield-halved"></i></div> ScamBandhKaro</a><p>Community-powered fraud detection and reporting platform.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="alerts.html">Alerts</a></li><li><a href="tools.html">Tools</a></li><li><a href="report.html">Report</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="learn.html">Learn</a></li><li><a href="resources.html">Resources</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:help@scambandhkaro.com">help@scambandhkaro.com</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 ScamBandhKaro. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script>
+  Storage.initializeData();
+  function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+  // Set default date
+  document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+
+  let selectedSeverity = 'medium';
+
+  function selectSeverity(sev) {
+    selectedSeverity = sev;
+    document.querySelectorAll('.severity-opt').forEach(el => el.classList.remove('selected'));
+    const opts = document.querySelectorAll('.severity-opt');
+    const idx = { low: 0, medium: 1, high: 2 }[sev];
+    opts[idx].classList.add('selected');
+    document.getElementById('reportSeverity').value = sev;
+  }
+
+  function submitReport(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+    btn.disabled = true;
+
+    const flags = Array.from(document.querySelectorAll('input[name="flags"]:checked')).map(cb => cb.value);
+
+    const report = {
+      title: document.getElementById('reportTitle').value,
+      category: document.getElementById('reportCategory').value,
+      date: document.getElementById('reportDate').value,
+      method: document.getElementById('reportMethod').value,
+      description: document.getElementById('reportDescription').value,
+      severity: selectedSeverity,
+      amountLost: document.getElementById('reportAmount').value || 0,
+      paymentMethod: document.getElementById('reportPayment').value,
+      scamPhone: document.getElementById('reportScamPhone').value,
+      scamEmail: document.getElementById('reportScamEmail').value,
+      scamUrl: document.getElementById('reportScamUrl').value,
+      flags
+    };
+
+    // Simulate API delay
+    setTimeout(() => {
+      const saved = Storage.addReport(report);
+      Storage.addAlertFromReport(report);
+
+      // Show success
+      document.getElementById('reportFormPanel').classList.add('hidden');
+      document.getElementById('successPanel').classList.remove('hidden');
+      document.getElementById('reportId').textContent = 'SNR-' + saved.id.toString().slice(-6).toUpperCase();
+
+      renderRecentReports();
+    }, 800);
+  }
+
+  function resetForm() {
+    document.getElementById('reportForm').reset();
+    document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+    selectSeverity('medium');
+    document.getElementById('reportFormPanel').classList.remove('hidden');
+    document.getElementById('successPanel').classList.add('hidden');
+    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Report';
+    document.getElementById('submitBtn').disabled = false;
+  }
+
+  function renderRecentReports() {
+    const reports = Storage.getReports().slice(0, 4);
+    const container = document.getElementById('recentReports');
+    if (reports.length === 0) {
+      container.innerHTML = '<div class="empty-state" style="padding:1rem;"><p style="font-size:0.85rem;">No reports yet.</p></div>';
+      return;
+    }
+    container.innerHTML = reports.map(r => `
+      <div class="recent-report">
+        <h5>${r.title}</h5>
+        <div class="report-meta">
+          <span class="badge badge-${r.severity === 'high' ? 'danger' : r.severity === 'medium' ? 'warning' : 'info'}" style="font-size:0.7rem;">${r.severity}</span>
+          <span style="margin-left:6px;">${r.category}</span>
+          <span class="status-badge status-under-review" style="margin-left:6px;"><i class="fa-solid fa-hourglass-half"></i> ${r.status}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  renderRecentReports();
+</script>
+</body>
+</html>

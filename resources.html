@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety Resources — ScamBandhKaro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .resources-layout { display: grid; grid-template-columns: 240px 1fr; gap: 2rem; align-items: start; }
+    @media (max-width: 900px) { .resources-layout { grid-template-columns: 1fr; } }
+    .resource-sidebar { position: sticky; top: 80px; }
+    .sidebar-section { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+    .sidebar-section h5 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .sidebar-filter { display: block; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.9rem; color: var(--text-secondary); transition: all 0.2s; background: none; border: none; width: 100%; text-align: left; font-family: inherit; }
+    .sidebar-filter:hover { background: var(--bg-darker); color: var(--text-primary); }
+    .sidebar-filter.active { background: rgba(16,185,129,0.1); color: var(--primary); font-weight: 600; }
+    .resource-type-badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+    .type-tool { background: rgba(59,130,246,0.1); color: var(--info); }
+    .type-guide { background: rgba(245,158,11,0.1); color: var(--warning); }
+    .resource-link { display: inline-flex; align-items: center; gap: 4px; color: var(--primary); font-size: 0.88rem; font-weight: 600; margin-top: auto; }
+    .resource-link:hover { color: var(--primary-light); }
+    .resources-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    .emergency-banner { background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(245,158,11,0.08) 100%); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem; }
+    .emergency-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .emergency-item { background: var(--bg-card); border-radius: var(--radius-sm); padding: 1rem; }
+    .emergency-item h5 { color: var(--danger); margin-bottom: 0.25rem; font-size: 0.9rem; }
+    .emergency-item p { font-size: 0.82rem; }
+    .emergency-item a { color: var(--primary); font-weight: 600; font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>ScamBandhKaro</a>
+  <ul class="navbar-nav" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="learn.html">Learn</a></li>
+    <li><a href="resources.html" class="active">Resources</a></li>
+    <li><a href="news.html">News</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+    <button class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-shield-halved" style="color:var(--primary);margin-right:10px;"></i>Safety Resources</h1>
+    <p>Curated tools, guides, and official reporting channels — including Indian portals like <strong style="color:var(--primary);">cybercrime.gov.in</strong> and helpline <strong style="color:var(--primary);">1930</strong> — to help you report, recover, and stay protected.</p>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- Indian Helpline Quick Bar -->
+    <div style="background:linear-gradient(90deg,rgba(255,153,51,0.08),rgba(19,136,8,0.06),rgba(19,136,8,0.06));border:1px solid rgba(255,153,51,0.25);border-radius:var(--radius);padding:0.85rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:0.6rem;"><i class="fa-solid fa-phone" style="color:#fb923c;"></i><span style="font-size:0.85rem;"><strong style="color:var(--text-primary);">Cyber Helpline:</strong> <strong style="color:#fb923c;font-size:1rem;">1930</strong></span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem;"><i class="fa-solid fa-globe" style="color:var(--primary);"></i><span style="font-size:0.85rem;"><strong style="color:var(--text-primary);">Report Online:</strong> <a href="https://cybercrime.gov.in" target="_blank" style="color:var(--primary);font-weight:600;">cybercrime.gov.in</a></span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem;"><i class="fa-solid fa-sim-card" style="color:#60a5fa;"></i><span style="font-size:0.85rem;"><strong style="color:var(--text-primary);">SIM Fraud:</strong> <a href="https://sancharsaathi.gov.in" target="_blank" style="color:#60a5fa;font-weight:600;">sancharsaathi.gov.in</a></span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem;"><i class="fa-solid fa-building-columns" style="color:#a78bfa;"></i><span style="font-size:0.85rem;"><strong style="color:var(--text-primary);">Loan Fraud:</strong> <a href="https://sachet.rbi.org.in" target="_blank" style="color:#a78bfa;font-weight:600;">sachet.rbi.org.in</a></span></div>
+    </div>
+
+    <!-- Emergency Banner -->
+    <div class="emergency-banner">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+        <span style="font-size:1.5rem;"><i class="fa-solid fa-circle-exclamation" style="color:var(--danger);"></i></span>
+        <h3 style="color:var(--danger);">Immediate Help — If You've Been Scammed</h3>
+      </div>
+      <p style="font-size:0.92rem;margin-bottom:0.75rem;">If you've lost money or shared personal information with a scammer, act immediately:</p>
+      <div class="emergency-grid">
+        <div class="emergency-item">
+          <h5><i class="fa-solid fa-credit-card"></i> Contact Your Bank</h5>
+          <p>Call the number on the back of your card immediately to report fraud and freeze your accounts.</p>
+        </div>
+        <div class="emergency-item">
+          <h5><i class="fa-solid fa-landmark"></i> Report to FTC</h5>
+          <p>File a fraud report at <a href="https://reportfraud.ftc.gov" target="_blank">ReportFraud.ftc.gov</a>. It fuels law enforcement action.</p>
+        </div>
+        <div class="emergency-item">
+          <h5><i class="fa-solid fa-lock"></i> Freeze Your Credit</h5>
+          <p>Contact Equifax, Experian, and TransUnion to place a credit freeze if your SSN was shared.</p>
+        </div>
+        <div class="emergency-item">
+          <h5><i class="fa-solid fa-key"></i> Change Passwords</h5>
+          <p>Immediately change passwords on all accounts, especially email and financial accounts.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div style="margin-bottom:1.5rem;">
+      <input type="text" class="form-control" id="resourceSearch" placeholder="🔍 Search resources..." oninput="filterResources()" style="max-width:500px;">
+    </div>
+
+    <div class="resources-layout">
+
+      <!-- SIDEBAR -->
+      <div class="resource-sidebar">
+        <div class="sidebar-section">
+          <h5>Filter by Category</h5>
+          <button class="sidebar-filter active" onclick="setCategory('')" id="cat-all">All Resources</button>
+          <button class="sidebar-filter" onclick="setCategory('Reporting')" id="cat-Reporting">Reporting</button>
+          <button class="sidebar-filter" onclick="setCategory('Identity Protection')" id="cat-Identity Protection">Identity Protection</button>
+          <button class="sidebar-filter" onclick="setCategory('Link Safety')" id="cat-Link Safety">Link Safety</button>
+          <button class="sidebar-filter" onclick="setCategory('Phone Safety')" id="cat-Phone Safety">Phone Safety</button>
+          <button class="sidebar-filter" onclick="setCategory('Email Safety')" id="cat-Email Safety">Email Safety</button>
+          <button class="sidebar-filter" onclick="setCategory('Consumer Protection')" id="cat-Consumer Protection">Consumer Protection</button>
+          <button class="sidebar-filter" onclick="setCategory('Guide')" id="cat-Guide">Guides</button>
+        </div>
+
+        <div class="sidebar-section">
+          <h5>Filter by Type</h5>
+          <button class="sidebar-filter active" onclick="setType('')" id="type-all">All Types</button>
+          <button class="sidebar-filter" onclick="setType('Tool')" id="type-Tool"><i class="fa-solid fa-wrench"></i> Tools</button>
+          <button class="sidebar-filter" onclick="setType('Guide')" id="type-Guide"><i class="fa-solid fa-book-open"></i> Guides</button>
+        </div>
+
+        <div class="sidebar-section" style="background:rgba(16,185,129,0.05);border-color:rgba(16,185,129,0.2);">
+          <h5 style="color:var(--primary);">Found a scam?</h5>
+          <a href="report.html" class="btn btn-primary btn-sm w-full" style="justify-content:center;margin-top:0.25rem;">Report It →</a>
+        </div>
+      </div>
+
+      <!-- RESOURCES GRID -->
+      <div>
+        <div id="resourceCount" style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;"></div>
+        <div class="resources-grid" id="resourcesGrid"></div>
+        <div class="empty-state hidden" id="noResources">
+          <div class="empty-icon"><i class="fa-solid fa-magnifying-glass" style="font-size:2.5rem;color:var(--text-muted);"></i></div>
+          <h3>No resources found</h3>
+          <p>Try adjusting your search or filter criteria.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="index.html" class="navbar-brand" style="margin-bottom:0.75rem;display:inline-flex;"><div class="logo-icon" style="margin-right:10px;"><i class="fa-solid fa-shield-halved"></i></div> ScamBandhKaro</a><p>Your hub for scam protection, reporting, and recovery resources.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="alerts.html">Alerts</a></li><li><a href="tools.html">Tools</a></li><li><a href="report.html">Report</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="learn.html">Learn</a></li><li><a href="resources.html">Resources</a></li><li><a href="news.html">News</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:help@scambandhkaro.com">help@scambandhkaro.com</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 ScamBandhKaro. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script>
+  Storage.initializeData();
+  function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+  let currentCat = '';
+  let currentType = '';
+
+  function setCategory(cat) {
+    currentCat = cat;
+    document.querySelectorAll('.sidebar-filter[id^="cat-"]').forEach(el => el.classList.remove('active'));
+    document.getElementById('cat-' + (cat || 'all')).classList.add('active');
+    filterResources();
+  }
+
+  function setType(type) {
+    currentType = type;
+    document.querySelectorAll('.sidebar-filter[id^="type-"]').forEach(el => el.classList.remove('active'));
+    document.getElementById('type-' + (type || 'all')).classList.add('active');
+    filterResources();
+  }
+
+  function filterResources() {
+    const search = document.getElementById('resourceSearch').value;
+    const resources = Storage.getResources({
+      category: currentCat === 'Guide' ? '' : currentCat,
+      type: currentCat === 'Guide' ? 'Guide' : currentType,
+      search
+    });
+    renderResources(resources);
+  }
+
+  function renderResources(resources) {
+    const grid = document.getElementById('resourcesGrid');
+    const empty = document.getElementById('noResources');
+    const count = document.getElementById('resourceCount');
+
+    count.textContent = `Showing ${resources.length} resource${resources.length !== 1 ? 's' : ''}`;
+
+    if (resources.length === 0) {
+      grid.innerHTML = '';
+      empty.classList.remove('hidden');
+      return;
+    }
+    empty.classList.add('hidden');
+
+    grid.innerHTML = resources.map(r => `
+      <div class="resource-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;flex-wrap:wrap;">
+          <span class="resource-type-badge type-${r.type.toLowerCase()}">${r.type === 'Tool' ? '<i class="fa-solid fa-wrench"></i>' : '<i class="fa-solid fa-book-open"></i>'} ${r.type}</span>
+          <span class="badge badge-secondary" style="font-size:0.7rem;">${r.category}</span>
+        </div>
+        <h4>${r.title}</h4>
+        <p>${r.description}</p>
+        <div class="resource-card-tags">${r.tags.map(t => `<span class="alert-tag">${t}</span>`).join('')}</div>
+        <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="resource-link">Visit Resource ↗</a>
+      </div>
+    `).join('');
+  }
+
+  filterResources();
+</script>
+</body>
+</html>

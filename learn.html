@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learn About Scams — ScamBandhKaro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .learn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .learn-detail-expanded { background: var(--bg-darker); border: 1.5px solid var(--primary); border-radius: var(--radius); padding: 2.5rem; margin: 1.5rem 0; animation: fadeSlide 0.3s ease; }
+    .content-section { margin-bottom: 1.75rem; }
+    .content-section h4 { color: var(--primary); margin-bottom: 0.6rem; font-size: 1rem; }
+    .content-section p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; }
+    .search-bar { max-width: 500px; margin: 0 auto 2rem; }
+    .quiz-box { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2); border-radius: var(--radius); padding: 2rem; margin-top: 3rem; }
+    .quiz-question { font-size: 1.05rem; font-weight: 600; margin-bottom: 1.25rem; }
+    .quiz-options { display: grid; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .quiz-opt { padding: 0.9rem 1.25rem; background: var(--bg-card); border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.95rem; transition: all 0.2s; text-align: left; width: 100%; font-family: inherit; color: var(--text-primary); }
+    .quiz-opt:hover { border-color: var(--primary); }
+    .quiz-opt.correct { border-color: var(--safe); background: rgba(16,185,129,0.1); color: var(--safe); }
+    .quiz-opt.incorrect { border-color: var(--danger); background: rgba(239,68,68,0.1); color: var(--danger); }
+    .quiz-feedback { padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; }
+    .quiz-feedback.correct { background: rgba(16,185,129,0.1); border: 1px solid var(--safe); color: var(--safe); }
+    .quiz-feedback.incorrect { background: rgba(239,68,68,0.1); border: 1px solid var(--danger); color: var(--danger); }
+    .progress-bar-wrap { background: var(--bg-darker); border-radius: 20px; height: 8px; margin-top: 0.5rem; }
+    .quick-tips { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .quick-tip { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>ScamBandhKaro</a>
+  <ul class="navbar-nav" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+    <li><a href="tools.html">Tools</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="learn.html" class="active">Learn</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="news.html">News</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+    <button class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-book-open" style="color:var(--primary);margin-right:10px;"></i>Learn About Scams</h1>
+    <p>Knowledge is your best protection. Explore our guides on every type of online fraud and learn how to stay safe.</p>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- Search -->
+    <div class="search-bar">
+      <input type="text" class="form-control" id="learnSearch" placeholder="🔍 Search scam types..." oninput="filterLearn()">
+    </div>
+
+    <!-- Category Grid -->
+    <div class="learn-grid" id="learnGrid"></div>
+
+    <!-- Detail Panel -->
+    <div id="learnDetail" class="hidden"></div>
+
+    <!-- Quick Tips -->
+    <div style="margin-top:4rem;">
+      <div class="section-title">
+        <h2>Universal Protection Tips</h2>
+        <p>These rules protect you against nearly every type of scam</p>
+      </div>
+      <div class="quick-tips">
+        <div class="quick-tip">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem;"><i class="fa-solid fa-hand"></i></div>
+          <h4>Stop & Verify</h4>
+          <p style="font-size:0.87rem;">Any unsolicited contact asking for money or information — stop, hang up, and verify through official channels.</p>
+        </div>
+        <div class="quick-tip">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem;"><i class="fa-solid fa-ban"></i></div>
+          <h4>Never Pay with Gift Cards</h4>
+          <p style="font-size:0.87rem;">No legitimate organization — government, bank, or business — ever asks for payment via gift cards. Ever.</p>
+        </div>
+        <div class="quick-tip">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem;"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <h4>Verify URLs Before Clicking</h4>
+          <p style="font-size:0.87rem;">Hover over links to see the real destination. Type URLs directly into your browser rather than clicking links.</p>
+        </div>
+        <div class="quick-tip">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem;"><i class="fa-solid fa-lock"></i></div>
+          <h4>Enable 2FA Everywhere</h4>
+          <p style="font-size:0.87rem;">Two-factor authentication blocks 99% of automated account takeover attacks even if passwords are stolen.</p>
+        </div>
+        <div class="quick-tip">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem;"><i class="fa-solid fa-user-secret"></i></div>
+          <h4>Guard Your SSN</h4>
+          <p style="font-size:0.87rem;">Your Social Security Number is the master key to your identity. Share it only when legally required.</p>
+        </div>
+        <div class="quick-tip">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem;"><i class="fa-solid fa-bullhorn"></i></div>
+          <h4>Talk About It</h4>
+          <p style="font-size:0.87rem;">Scammers thrive on secrecy. Discuss suspicious contacts with a trusted friend or family member before acting.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz-box" id="quizSection">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <h3><i class="fa-solid fa-brain"></i> Scam Awareness Quiz</h3>
+          <p style="font-size:0.9rem;">Test your knowledge and see how scam-savvy you are.</p>
+        </div>
+        <span id="quizProgress" style="color:var(--text-muted);font-size:0.85rem;">Question 1 of 5</span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-fill" id="quizProgressBar" style="width:20%;"></div></div>
+      <div style="margin-top:1.5rem;" id="quizContent"></div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="index.html" class="navbar-brand" style="margin-bottom:0.75rem;display:inline-flex;"><div class="logo-icon" style="margin-right:10px;"><i class="fa-solid fa-shield-halved"></i></div> ScamBandhKaro</a><p>Empowering communities with scam awareness and AI-powered protection tools.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="alerts.html">Alerts</a></li><li><a href="tools.html">Tools</a></li><li><a href="report.html">Report</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="learn.html">Learn</a></li><li><a href="resources.html">Resources</a></li><li><a href="news.html">News</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:help@scambandhkaro.com">help@scambandhkaro.com</a></li><li><a href="report.html">Submit Report</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 ScamBandhKaro. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script>
+  Storage.initializeData();
+  function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+  let activeCategory = null;
+  const categories = Storage.getLearnCategories();
+
+  function renderGrid(cats) {
+    const grid = document.getElementById('learnGrid');
+    grid.innerHTML = cats.map(c => `
+      <div class="learn-card" onclick="toggleDetail('${c.id}')">
+        <div class="learn-card-icon">${c.icon}</div>
+        <h3>${c.title}</h3>
+        <p style="font-size:0.9rem;margin-bottom:1rem;">${c.summary}</p>
+        <div style="color:var(--primary);font-size:0.88rem;font-weight:600;">Learn more →</div>
+      </div>
+    `).join('');
+  }
+
+  function filterLearn() {
+    const q = document.getElementById('learnSearch').value.toLowerCase();
+    const filtered = categories.filter(c =>
+      c.title.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q)
+    );
+    renderGrid(filtered);
+    document.getElementById('learnDetail').classList.add('hidden');
+    activeCategory = null;
+  }
+
+  function toggleDetail(id) {
+    if (activeCategory === id) {
+      activeCategory = null;
+      document.getElementById('learnDetail').classList.add('hidden');
+      return;
+    }
+    activeCategory = id;
+    const cat = Storage.getLearnCategory(id);
+    if (!cat) return;
+
+    const detail = document.getElementById('learnDetail');
+    detail.classList.remove('hidden');
+    detail.innerHTML = `
+      <div class="learn-detail-expanded">
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+          <span style="font-size:2.5rem;">${cat.icon}</span>
+          <div>
+            <h2 style="margin-bottom:0.25rem;">${cat.title}</h2>
+            <p style="font-size:0.9rem;">${cat.summary}</p>
+          </div>
+          <button onclick="toggleDetail('${id}')" style="margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.5rem;">✕</button>
+        </div>
+        ${cat.fullContent.map(s => `
+          <div class="content-section">
+            <h4>${s.heading}</h4>
+            <p>${s.text}</p>
+          </div>
+        `).join('')}
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;padding-top:1rem;border-top:1px solid var(--border-light);">
+          <a href="tools.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Use Detection Tools</a>
+          <a href="report.html" class="btn btn-outline btn-sm"><i class="fa-solid fa-file-pen"></i> Report a Scam</a>
+          <a href="resources.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-clipboard-list"></i> Find Resources</a>
+        </div>
+      </div>`;
+
+    detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ─── QUIZ ────────────────────────────────────────────────────────────────────
+  const quizQuestions = [
+    {
+      q: 'A caller says they are from the IRS and you owe back taxes. They demand immediate payment via gift cards or you will be arrested. What should you do?',
+      options: ['Pay immediately to avoid arrest', 'Ask them to send a letter and hang up', 'Give them your credit card number', 'Give them your bank account details'],
+      correct: 1,
+      explanation: '✅ The IRS always sends paper notices before calling. They NEVER demand immediate payment via gift cards, and threatening arrest for tax debt is illegal. Hang up and call the IRS directly at 1-800-829-1040.'
+    },
+    {
+      q: 'You receive an email from "Amazon" saying your account is suspended. The email has a link to "verify" your information. What should you do?',
+      options: ['Click the link immediately to unsuspend your account', 'Forward it to a friend', 'Go directly to amazon.com by typing it in your browser', 'Reply with your login credentials'],
+      correct: 2,
+      explanation: '✅ Never click links in suspicious emails. Type amazon.com directly into your browser to check your account status. Check the sender\'s actual email address — it\'s rarely amazon.com in phishing attacks.'
+    },
+    {
+      q: 'Someone you met on a dating app is deeply in love with you after 2 weeks and has never been able to video chat. They need $500 for a medical emergency. This is likely:',
+      options: ['A genuine romantic connection', 'A romance scam (catfishing)', 'Normal online dating behavior', 'A friend testing you'],
+      correct: 1,
+      explanation: '✅ This is a classic romance scam. Key red flags: fast emotional intensity, inability to video chat, and a money request. Real people don\'t ask for money from someone they\'ve never met.'
+    },
+    {
+      q: 'Which of these payment methods do scammers prefer because it\'s nearly impossible to recover?',
+      options: ['Credit card', 'Bank wire transfer, gift cards, or cryptocurrency', 'PayPal with buyer protection', 'Personal check'],
+      correct: 1,
+      explanation: '✅ Scammers prefer wire transfers, gift cards, Zelle, and cryptocurrency because these transactions are irreversible. Credit cards have chargeback protections — scammers avoid them.'
+    },
+    {
+      q: 'You get a pop-up claiming "Microsoft" detected a virus and you must call a number immediately. What is this?',
+      options: ['A real Microsoft security warning', 'A legitimate computer scan result', 'A Tech Support Scam', 'Your antivirus working correctly'],
+      correct: 2,
+      explanation: '✅ Microsoft never sends pop-up warnings with phone numbers. This is a tech support scam. Close the browser (use Task Manager if needed). Never call the number — scammers will try to get remote access to your computer.'
+    }
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+  let answered = false;
+
+  function renderQuestion() {
+    const q = quizQuestions[currentQuestion];
+    const progressPct = ((currentQuestion + 1) / quizQuestions.length) * 100;
+    document.getElementById('quizProgress').textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+    document.getElementById('quizProgressBar').style.width = progressPct + '%';
+
+    document.getElementById('quizContent').innerHTML = `
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((opt, i) => `
+          <button class="quiz-opt" onclick="answerQuestion(${i})" id="opt-${i}">${String.fromCharCode(65+i)}. ${opt}</button>
+        `).join('')}
+      </div>
+      <div id="quizFeedback"></div>
+      ${currentQuestion < quizQuestions.length - 1
+        ? `<button class="btn btn-outline btn-sm hidden" id="nextBtn" onclick="nextQuestion()">Next Question →</button>`
+        : `<button class="btn btn-primary btn-sm hidden" id="nextBtn" onclick="showScore()">See My Score →</button>`
+      }`;
+  }
+
+  function answerQuestion(idx) {
+    if (answered) return;
+    answered = true;
+    const q = quizQuestions[currentQuestion];
+    const opts = document.querySelectorAll('.quiz-opt');
+
+    opts.forEach((btn, i) => {
+      btn.disabled = true;
+      if (i === q.correct) btn.classList.add('correct');
+      else if (i === idx) btn.classList.add('incorrect');
+    });
+
+    const isCorrect = idx === q.correct;
+    if (isCorrect) score++;
+
+    document.getElementById('quizFeedback').innerHTML = `
+      <div class="quiz-feedback ${isCorrect ? 'correct' : 'incorrect'}">
+        ${isCorrect ? '<i class="fa-solid fa-circle-check"></i> Correct! ' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect. '} ${q.explanation}
+      </div>`;
+
+    document.getElementById('nextBtn').classList.remove('hidden');
+  }
+
+  function nextQuestion() {
+    currentQuestion++;
+    answered = false;
+    renderQuestion();
+  }
+
+  function showScore() {
+    const pct = Math.round((score / quizQuestions.length) * 100);
+    let msg, color;
+    if (pct === 100) { msg = 'Perfect! You\'re a scam detection expert!'; color = 'var(--safe)'; }
+    else if (pct >= 60) { msg = 'Good job! You know the basics, but keep learning.'; color = 'var(--warning)'; }
+    else { msg = 'Keep studying — scam awareness could save you money!'; color = 'var(--danger)'; }
+
+    document.getElementById('quizContent').innerHTML = `
+      <div style="text-align:center;padding:1rem;">
+        <div style="font-size:2rem;margin-bottom:0.75rem;">${pct >= 80 ? '<i class="fa-solid fa-trophy" style="color:#fbbf24;"></i>' : pct >= 60 ? '<i class="fa-solid fa-book-open" style="color:var(--warning);"></i>' : '<i class="fa-solid fa-rotate" style="color:var(--info);"></i>'}</div>
+        <h3 style="color:${color};margin-bottom:0.5rem;">You scored ${score}/${quizQuestions.length} (${pct}%)</h3>
+        <p style="margin-bottom:1.5rem;">${msg}</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="restartQuiz()">Try Again</button>
+          <a href="resources.html" class="btn btn-outline">View Resources →</a>
+        </div>
+      </div>`;
+  }
+
+  function restartQuiz() {
+    currentQuestion = 0; score = 0; answered = false;
+    renderQuestion();
+  }
+
+  // Initialize
+  renderGrid(categories);
+  renderQuestion();
+</script>
+</body>
+</html>
