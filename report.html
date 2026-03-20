@@ -359,6 +359,7 @@
         document.getElementById('reportFormPanel').classList.add('hidden');
         document.getElementById('successPanel').classList.remove('hidden');
         document.getElementById('reportId').textContent = 'SNR-' + docRef.id.slice(-6).toUpperCase();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         renderRecentReports();
       })
@@ -371,6 +372,7 @@
         document.getElementById('reportFormPanel').classList.add('hidden');
         document.getElementById('successPanel').classList.remove('hidden');
         document.getElementById('reportId').textContent = 'SNR-' + saved.id.toString().slice(-6).toUpperCase();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         renderRecentReports();
       });
