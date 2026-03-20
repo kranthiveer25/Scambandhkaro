@@ -406,12 +406,34 @@ a:hover { color: var(--primary-light); }
     top: 64px;
     left: 0;
     right: 0;
-    background: var(--bg-darker);
+    background: var(--bg-card);
     border-bottom: 1px solid var(--border-light);
-    padding: 1rem;
-    gap: 2px;
+    padding: 0.5rem 0;
+    gap: 0;
+    z-index: 999;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
+  /* Bigger, easier-to-tap nav links */
+  .navbar-nav.open li a {
+    display: block;
+    padding: 14px 1.5rem;
+    font-size: 1rem;
+    min-height: 48px;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .navbar-nav.open li:last-child a { border-bottom: none; }
   .hamburger { display: flex; }
+
+  /* Overlay to catch outside clicks */
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+    background: rgba(0,0,0,0.4);
+  }
+  .nav-overlay.visible { display: block; }
 }
 
 /* ─── BUTTONS ────────────────────────────────────────────────────────────────── */

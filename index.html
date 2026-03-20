@@ -201,21 +201,40 @@
     }
     draw() {
       const pulse = 0.5 + Math.sin(this.phase) * 0.5;
-      let color, glow;
-      if (this.blocked)     { color = `rgba(16,185,129,${0.5+pulse*0.4})`; glow = 'rgba(16,185,129,0.15)'; }
-      else if (this.threat) { color = `rgba(239,68,68,${0.6+pulse*0.35})`; glow = 'rgba(239,68,68,0.18)'; }
-      else                  { color = `rgba(96,165,250,${0.2+pulse*0.15})`; glow = null; }
-
-      if (glow) {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r + 5 + pulse*3, 0, Math.PI*2);
-        ctx.fillStyle = glow;
-        ctx.fill();
+      let color, shadowColor, shadowBlur;
+      if (this.blocked) {
+        color       = `rgba(16,185,129,${0.7 + pulse*0.3})`;
+        shadowColor = '#10b981';
+        shadowBlur  = 12 + pulse * 14;
+      } else if (this.threat) {
+        color       = `rgba(239,68,68,${0.75 + pulse*0.25})`;
+        shadowColor = '#ef4444';
+        shadowBlur  = 14 + pulse * 16;
+      } else {
+        color       = `rgba(96,165,250,${0.4 + pulse*0.35})`;
+        shadowColor = '#60a5fa';
+        shadowBlur  = 6 + pulse * 10;
       }
+
+      // Outer glow halo
+      const haloR = this.r + 5 + pulse * 5;
+      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, haloR);
+      grad.addColorStop(0, color);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ctx.arc(this.x, this.y, haloR, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Core dot with shadow glow
+      ctx.save();
+      ctx.shadowColor = shadowColor;
+      ctx.shadowBlur  = shadowBlur;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r * 1.2, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
+      ctx.restore();
     }
   }
 

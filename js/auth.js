@@ -87,11 +87,43 @@
     });
   }
 
+  // ── Mobile nav: overlay + outside-click to close ─────────────
+  function initMobileNav() {
+    // Inject overlay div once
+    if (!document.getElementById('navOverlay')) {
+      const overlay = document.createElement('div');
+      overlay.id = 'navOverlay';
+      overlay.className = 'nav-overlay';
+      overlay.addEventListener('click', closeNav);
+      document.body.appendChild(overlay);
+    }
+  }
+
+  function closeNav() {
+    const nav = document.getElementById('navLinks');
+    const overlay = document.getElementById('navOverlay');
+    if (nav) nav.classList.remove('open');
+    if (overlay) overlay.classList.remove('visible');
+  }
+
+  // Override toggleNav globally so all pages use this version
+  window.toggleNav = function() {
+    const nav = document.getElementById('navLinks');
+    const overlay = document.getElementById('navOverlay');
+    if (!nav) return;
+    const isOpen = nav.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('visible', isOpen);
+  };
+
   // Run once DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAuthUI);
+    document.addEventListener('DOMContentLoaded', function() {
+      initAuthUI();
+      initMobileNav();
+    });
   } else {
     initAuthUI();
+    initMobileNav();
   }
 
 })();

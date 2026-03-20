@@ -9,8 +9,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     .alerts-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
-    @media (max-width: 900px) { .alerts-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .alerts-layout { grid-template-columns: 1fr; } .filter-panel { position: static !important; } }
     .filter-panel { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 1.5rem; position: sticky; top: 80px; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     .filter-panel h4 { margin-bottom: 1.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
     .filter-option { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.9rem; color: var(--text-secondary); transition: all 0.2s; }
     .filter-option:hover { background: var(--bg-darker); color: var(--text-primary); }
@@ -197,8 +198,8 @@
       return;
     }
 
-    list.innerHTML = alerts.map(a => `
-      <div class="alert-card severity-${a.severity}" style="cursor:pointer;" onclick="toggleAlertDetail(${a.id})">
+    list.innerHTML = alerts.map((a, idx) => `
+      <div class="alert-card severity-${a.severity}" style="cursor:pointer;" onclick="toggleAlertDetail('alert-${idx}')">
         <div class="alert-card-header">
           <div style="flex:1;">
             <div class="alert-meta">
@@ -218,10 +219,10 @@
         <div class="alert-tags">${a.tags.map(t => `<span class="alert-tag">${t}</span>`).join('')}</div>
         <div style="margin-top:0.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
           <div class="alert-regions">${(a.affectedRegions || []).map(r => `<span class="region-badge"><i class="fa-solid fa-location-dot"></i> ${r}</span>`).join('')}</div>
-          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();analyzeThis(${a.id})"><i class="fa-solid fa-magnifying-glass"></i> Analyze</button>
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();analyzeThis('alert-${idx}')"><i class="fa-solid fa-magnifying-glass"></i> Analyze</button>
         </div>
       </div>
-      <div class="alert-detail-panel hidden" id="detail-${a.id}">
+      <div class="alert-detail-panel hidden" id="detail-alert-${idx}">
         <h4 style="margin-bottom:0.75rem;"><i class="fa-solid fa-clipboard-list"></i> Full Alert Details</h4>
         <p style="margin-bottom:1rem;">${a.description}</p>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
@@ -232,12 +233,17 @@
     `).join('');
   }
 
-  function toggleAlertDetail(id) {
-    const detail = document.getElementById('detail-' + id);
+  function toggleAlertDetail(uid) {
+    const detail = document.getElementById('detail-' + uid);
+    if (!detail) return;
     detail.classList.toggle('hidden');
+    // Smooth scroll to detail if it opened
+    if (!detail.classList.contains('hidden')) {
+      detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
 
-  function analyzeThis(id) {
+  function analyzeThis(uid) {
     location.href = 'tools.html';
   }
 
