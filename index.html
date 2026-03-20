@@ -74,24 +74,26 @@
   </div>
 
   <!-- CONTENT -->
-  <div class="container" style="position:relative;z-index:2;">
+  <div class="container" style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding-top:3rem;padding-bottom:1.5rem;max-width:1100px;">
     <div class="hero-content">
       <div class="hero-badge"><i class="fa-solid fa-shield-halved"></i> स्कैम बंध करो &nbsp;·&nbsp; Your Digital Shield</div>
       <h1>Stay Protected From<br><span>Online Scams</span></h1>
-      <p style="font-size:0.88rem;color:var(--primary);font-weight:600;letter-spacing:0.03em;margin-bottom:0.5rem;opacity:0.85;">Be Safe Online &nbsp;·&nbsp; UPI Scam &nbsp;·&nbsp; KYC Scam &nbsp;·&nbsp; Cyber Security</p>
+      <p style="font-size:0.82rem;color:var(--primary);font-weight:600;letter-spacing:0.05em;margin-bottom:0.6rem;opacity:0.9;text-transform:uppercase;">Be Safe &nbsp;·&nbsp; UPI Scam &nbsp;·&nbsp; KYC Scam &nbsp;·&nbsp; Cyber Security</p>
       <p>Empowering communities with real-time alerts, advanced AI detection tools, and a collaborative reporting network to fight digital fraud.</p>
       <div class="hero-actions">
         <a href="alerts.html" class="btn btn-primary btn-lg"><i class="fa-solid fa-bell"></i> Check Latest Scam Alerts</a>
         <a href="report.html" class="btn btn-outline btn-lg"><i class="fa-solid fa-flag"></i> Report a Scam</a>
-        <a href="tools.html" class="btn btn-ghost btn-lg"><i class="fa-solid fa-magnifying-glass"></i> Scan Suspicious Message</a>
+        <a href="tools.html" class="btn btn-ghost btn-lg"><i class="fa-solid fa-magnifying-glass"></i> Scan a Message</a>
       </div>
     </div>
   </div>
-  <div class="container" style="position:relative;z-index:2;padding-bottom:3rem;">
-    <div class="hero-scan-box">
+
+  <!-- SCAN BOX below content, centered -->
+  <div class="container" style="position:relative;z-index:2;padding-bottom:3.5rem;max-width:680px;">
+    <div class="hero-scan-box" style="border-radius:14px;">
       <div class="scan-label">Quick Scan — Paste any suspicious message or link</div>
       <div class="hero-scan-inner">
-        <input type="text" class="form-control" id="heroScanInput" placeholder="e.g. 'You won $1000! Click here to claim...'">
+        <input type="text" class="form-control" id="heroScanInput" placeholder="e.g. 'You won ₹50,000! Click here to claim...'">
         <a href="tools.html" class="btn btn-primary" id="heroScanBtn">Scan →</a>
       </div>
     </div>
@@ -587,6 +589,12 @@
   </div>
 </footer>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/storage.js"></script>
 <script>
   Storage.initializeData();

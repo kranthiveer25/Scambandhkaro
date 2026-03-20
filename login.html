@@ -35,7 +35,7 @@
         <p>Sign in to your ScamBandhKaro account</p>
       </div>
 
-      <button class="social-btn" onclick="showToast('Google sign-in coming soon!')">
+      <button class="social-btn" id="googleSignInBtn" onclick="handleGoogleSignIn()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
           <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -85,45 +85,81 @@
 
 <div id="toastContainer"></div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
 <script>
-  function togglePassword(id, btn) {
-    const inp = document.getElementById(id);
-    if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'; }
-    else { inp.type = 'password'; btn.innerHTML = '<i class="fa-solid fa-eye"></i>'; }
+  // If already signed in → redirect home
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) window.location.href = 'index.html';
+  });
+
+  // ── Google Sign-In ─────────────────────────────────────────────
+  function handleGoogleSignIn() {
+    const btn = document.getElementById('googleSignInBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
+
+    fbAuth.signInWithPopup(window.googleProvider)
+      .then(function() {
+        window.location.href = 'index.html';
+      })
+      .catch(function(err) {
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg> Continue with Google`;
+        showError(err.message || 'Google sign-in failed. Please try again.');
+      });
   }
 
+  // ── Email / Password Sign-In ───────────────────────────────────
   function handleLogin(e) {
     e.preventDefault();
     const btn = document.getElementById('loginBtn');
     btn.textContent = 'Signing in...';
     btn.disabled = true;
 
-    const email = document.getElementById('loginEmail').value;
+    const email    = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
 
-    // Demo: check localStorage for registered user
-    setTimeout(() => {
-      const users = JSON.parse(localStorage.getItem('scambandhkaro_users') || '[]');
-      const user = users.find(u => u.email === email && u.password === btoa(password));
-
-      if (user) {
-        localStorage.setItem('scambandhkaro_session', JSON.stringify({ email: user.email, name: user.name, loggedIn: true }));
-        showToast('Welcome back, ' + user.name + '! Redirecting...');
-        setTimeout(() => location.href = 'index.html', 1500);
-      } else {
-        const err = document.getElementById('loginError');
-        err.classList.remove('hidden');
-        err.textContent = 'Invalid email or password. Please try again or sign up.';
+    fbAuth.signInWithEmailAndPassword(email, password)
+      .then(function() {
+        window.location.href = 'index.html';
+      })
+      .catch(function(err) {
         btn.textContent = 'Sign In';
         btn.disabled = false;
-      }
-    }, 800);
+        const msgs = {
+          'auth/user-not-found':  'No account found with this email. Please sign up first.',
+          'auth/wrong-password':  'Incorrect password. Please try again.',
+          'auth/invalid-email':   'Invalid email address.',
+          'auth/too-many-requests': 'Too many attempts. Please wait a minute and try again.'
+        };
+        showError(msgs[err.code] || err.message);
+      });
+  }
+
+  function showError(msg) {
+    const err = document.getElementById('loginError');
+    err.classList.remove('hidden');
+    err.textContent = msg;
+  }
+
+  function togglePassword(id, btn) {
+    const inp = document.getElementById(id);
+    if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'; }
+    else { inp.type = 'password'; btn.innerHTML = '<i class="fa-solid fa-eye"></i>'; }
   }
 
   function showToast(msg) {
     const t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = msg;
+    t.className = 'toast'; t.textContent = msg;
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 3200);
   }

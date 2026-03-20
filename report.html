@@ -293,6 +293,12 @@
   </div>
 </footer>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/storage.js"></script>
 <script>
   Storage.initializeData();
@@ -321,32 +327,53 @@
     const flags = Array.from(document.querySelectorAll('input[name="flags"]:checked')).map(cb => cb.value);
 
     const report = {
-      title: document.getElementById('reportTitle').value,
-      category: document.getElementById('reportCategory').value,
-      date: document.getElementById('reportDate').value,
-      method: document.getElementById('reportMethod').value,
-      description: document.getElementById('reportDescription').value,
-      severity: selectedSeverity,
-      amountLost: document.getElementById('reportAmount').value || 0,
+      title:         document.getElementById('reportTitle').value.trim(),
+      category:      document.getElementById('reportCategory').value,
+      incidentDate:  document.getElementById('reportDate').value,
+      contactMethod: document.getElementById('reportMethod').value,
+      description:   document.getElementById('reportDescription').value.trim(),
+      severity:      selectedSeverity,
+      amountLost:    parseFloat(document.getElementById('reportAmount').value) || 0,
       paymentMethod: document.getElementById('reportPayment').value,
-      scamPhone: document.getElementById('reportScamPhone').value,
-      scamEmail: document.getElementById('reportScamEmail').value,
-      scamUrl: document.getElementById('reportScamUrl').value,
-      flags
+      scamPhone:     document.getElementById('reportScamPhone').value.trim(),
+      scamEmail:     document.getElementById('reportScamEmail').value.trim(),
+      scamUrl:       document.getElementById('reportScamUrl').value.trim(),
+      flags,
+      status:        'pending',
+      // Auth info (null if not logged in — anonymous reports are fine)
+      userId:        window.currentUser ? window.currentUser.uid   : null,
+      userEmail:     window.currentUser ? window.currentUser.email : null,
+      userName:      window.currentUser ? window.currentUser.displayName : null,
+      // Server timestamp added by Firestore
+      submittedAt:   firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    // Simulate API delay
-    setTimeout(() => {
-      const saved = Storage.addReport(report);
-      Storage.addAlertFromReport(report);
+    // ── Save to Firestore ──────────────────────────────────────────
+    fbDb.collection('reports').add(report)
+      .then(function(docRef) {
+        // Also keep a local copy so other pages see it immediately
+        Storage.addReport({ ...report, firestoreId: docRef.id });
+        Storage.addAlertFromReport(report);
 
-      // Show success
-      document.getElementById('reportFormPanel').classList.add('hidden');
-      document.getElementById('successPanel').classList.remove('hidden');
-      document.getElementById('reportId').textContent = 'SNR-' + saved.id.toString().slice(-6).toUpperCase();
+        // Show success screen
+        document.getElementById('reportFormPanel').classList.add('hidden');
+        document.getElementById('successPanel').classList.remove('hidden');
+        document.getElementById('reportId').textContent = 'SNR-' + docRef.id.slice(-6).toUpperCase();
 
-      renderRecentReports();
-    }, 800);
+        renderRecentReports();
+      })
+      .catch(function(err) {
+        console.error('Firestore error:', err);
+        // Fallback to localStorage if Firebase isn't configured yet
+        const saved = Storage.addReport(report);
+        Storage.addAlertFromReport(report);
+
+        document.getElementById('reportFormPanel').classList.add('hidden');
+        document.getElementById('successPanel').classList.remove('hidden');
+        document.getElementById('reportId').textContent = 'SNR-' + saved.id.toString().slice(-6).toUpperCase();
+
+        renderRecentReports();
+      });
   }
 
   function resetForm() {
@@ -372,7 +399,7 @@
         <div class="report-meta">
           <span class="badge badge-${r.severity === 'high' ? 'danger' : r.severity === 'medium' ? 'warning' : 'info'}" style="font-size:0.7rem;">${r.severity}</span>
           <span style="margin-left:6px;">${r.category}</span>
-          <span class="status-badge status-under-review" style="margin-left:6px;"><i class="fa-solid fa-hourglass-half"></i> ${r.status}</span>
+          <span class="status-badge status-under-review" style="margin-left:6px;"><i class="fa-solid fa-hourglass-half"></i> ${r.status || 'pending'}</span>
         </div>
       </div>
     `).join('');

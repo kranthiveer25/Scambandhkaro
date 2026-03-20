@@ -114,7 +114,18 @@
   </div>
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+
 <script>
+  // If already signed in → redirect home
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) window.location.href = 'index.html';
+  });
+
   function togglePassword(id, btn) {
     const inp = document.getElementById(id);
     if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'; }
@@ -160,28 +171,29 @@
     btn.textContent = 'Creating account...';
     btn.disabled = true;
 
-    const userData = {
-      name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
-      email: document.getElementById('signupEmail').value,
-      password: btoa(password),
-      createdAt: new Date().toISOString()
-    };
+    const displayName = document.getElementById('firstName').value.trim() + ' ' + document.getElementById('lastName').value.trim();
+    const email       = document.getElementById('signupEmail').value.trim();
 
-    setTimeout(() => {
-      const users = JSON.parse(localStorage.getItem('scambandhkaro_users') || '[]');
-      if (users.find(u => u.email === userData.email)) {
-        err.classList.remove('hidden');
-        err.textContent = 'An account with this email already exists. Sign in instead.';
+    fbAuth.createUserWithEmailAndPassword(email, password)
+      .then(function(result) {
+        // Save display name to Firebase profile
+        return result.user.updateProfile({ displayName: displayName });
+      })
+      .then(function() {
+        showToast('Account created! Welcome to ScamBandhKaro!');
+        setTimeout(() => location.href = 'index.html', 1200);
+      })
+      .catch(function(error) {
         btn.textContent = 'Create Free Account';
         btn.disabled = false;
-        return;
-      }
-      users.push(userData);
-      localStorage.setItem('scambandhkaro_users', JSON.stringify(users));
-      localStorage.setItem('scambandhkaro_session', JSON.stringify({ email: userData.email, name: userData.name, loggedIn: true }));
-      showToast('Account created! Welcome to ScamBandhKaro!');
-      setTimeout(() => location.href = 'index.html', 1500);
-    }, 800);
+        const msgs = {
+          'auth/email-already-in-use': 'An account with this email already exists. Sign in instead.',
+          'auth/weak-password':        'Password is too weak. Use at least 6 characters.',
+          'auth/invalid-email':        'Invalid email address format.'
+        };
+        err.classList.remove('hidden');
+        err.textContent = msgs[error.code] || error.message;
+      });
   }
 
   function showToast(msg) {
