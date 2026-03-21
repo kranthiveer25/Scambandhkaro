@@ -551,20 +551,6 @@
   </div>
 </section>
 
-<!-- COMMUNITY REPORTS -->
-<section class="section-sm" style="background:var(--bg-dark);border-top:1px solid var(--border-light);">
-  <div class="container">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
-      <div>
-        <h2 style="font-size:1.5rem;">🛡️ Community Reports</h2>
-        <p style="color:var(--text-muted);font-size:0.9rem;">Recently submitted by our users — under review by our team</p>
-      </div>
-      <a href="report.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-flag"></i> Report a Scam</a>
-    </div>
-    <div id="homeCommunityReports"></div>
-  </div>
-</section>
-
 <!-- CTA -->
 <div class="cta-section">
   <div class="container">
@@ -669,8 +655,8 @@
     }
   });
 
-  // Load latest 4 SEED alerts (verified, not user-submitted)
-  const alerts = Storage.getSeedAlerts().slice(0, 4);
+  // Load latest 6 SEED alerts (verified, not user-submitted)
+  const alerts = Storage.getSeedAlerts().slice(0, 6);
   const list = document.getElementById('homeAlertsList');
   if (alerts.length === 0) {
     list.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-bell" style="font-size:2.5rem;color:var(--text-muted);"></i></div><p>No alerts yet.</p></div>';
@@ -695,49 +681,6 @@
         <div class="alert-tags">${a.tags.slice(0,4).map(t => `<span class="alert-tag">${t}</span>`).join('')}</div>
       </div>
     `).join('');
-  }
-
-  // Load community reports (user-submitted) — try Firestore first, fallback to localStorage
-  const communityEl = document.getElementById('homeCommunityReports');
-  function renderCommunityReports(reports) {
-    if (!reports || reports.length === 0) {
-      communityEl.innerHTML = `<div style="color:var(--text-muted);font-size:0.9rem;padding:1.5rem;text-align:center;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border-light);">
-        <i class="fa-solid fa-users" style="font-size:1.8rem;margin-bottom:0.75rem;display:block;opacity:0.4;"></i>
-        No community reports yet. Be the first to <a href="report.html" style="color:var(--primary);">report a scam</a>!
-      </div>`;
-      return;
-    }
-    communityEl.innerHTML = reports.slice(0, 4).map(r => `
-      <div class="alert-card" style="border-left:3px solid var(--warning);margin-bottom:1rem;">
-        <div class="alert-card-header">
-          <div style="flex:1;">
-            <div class="alert-meta">
-              <span class="badge badge-${r.severity === 'high' ? 'danger' : r.severity === 'medium' ? 'warning' : 'info'}">${r.severity || 'medium'} risk</span>
-              <span class="badge badge-secondary">${r.category || 'Other'}</span>
-              <span style="background:rgba(245,158,11,0.12);color:#f59e0b;padding:2px 8px;border-radius:12px;font-size:0.72rem;font-weight:600;">⏳ Under Review</span>
-            </div>
-            <h4 style="margin-top:0.5rem;">${r.title || 'Community Report'}</h4>
-          </div>
-          <div style="text-align:right;flex-shrink:0;font-size:0.75rem;color:var(--text-muted);">
-            ${r.submittedAt ? new Date(r.submittedAt.seconds ? r.submittedAt.seconds*1000 : r.submittedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : 'Recent'}
-          </div>
-        </div>
-        <p style="font-size:0.88rem;color:var(--text-secondary);">${(r.description||'').substring(0,140)}${(r.description||'').length>140?'...':''}</p>
-      </div>
-    `).join('');
-  }
-
-  // Try Firestore first
-  if (window.fbDb) {
-    window.fbDb.collection('reports').orderBy('submittedAt','desc').limit(4).get()
-      .then(snap => {
-        const firestoreReports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        if (firestoreReports.length > 0) renderCommunityReports(firestoreReports);
-        else renderCommunityReports(Storage.getReports());
-      })
-      .catch(() => renderCommunityReports(Storage.getReports()));
-  } else {
-    renderCommunityReports(Storage.getReports());
   }
 </script>
 </body>

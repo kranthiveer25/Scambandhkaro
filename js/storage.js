@@ -127,6 +127,46 @@ const Storage = (() => {
       severity: "high", category: "Phishing", date: "Mar 4, 2026", reports: 1120, verified: true,
       tags: ["Income Tax", "Refund", "Malware", "Email Phishing"],
       affectedRegions: ["All India"]
+    },
+    {
+      id: 16,
+      title: "Fake Part-Time Task App Scam (YouTube Like Fraud)",
+      description: "Victims are recruited via Telegram to earn money by liking YouTube videos or completing online tasks. After earning small initial amounts to build trust, they are asked to pay a 'deposit' for bigger tasks and then blocked.",
+      severity: "high", category: "Job Scam", date: "Mar 20, 2026", reports: 5130, verified: true,
+      tags: ["Telegram", "YouTube", "Task Fraud", "Advance Fee"],
+      affectedRegions: ["Pan India"]
+    },
+    {
+      id: 17,
+      title: "OTP Fraud via Fake Bank Executive Call",
+      description: "Fraudsters call pretending to be bank customer care, claim your account/card is compromised, and urgently ask you to share the OTP received on your phone 'to block the transaction'. The OTP actually authorises money transfer.",
+      severity: "high", category: "OTP Fraud", date: "Mar 19, 2026", reports: 6782, verified: true,
+      tags: ["OTP", "Bank", "Phone Fraud", "Social Engineering"],
+      affectedRegions: ["All India"]
+    },
+    {
+      id: 18,
+      title: "Fake Aadhaar Update Portal Phishing",
+      description: "WhatsApp messages and SMS claim that your Aadhaar card will be deactivated if not updated within 24 hours. The link leads to a fake UIDAI portal that steals Aadhaar number, DOB, and bank-linked mobile OTP.",
+      severity: "high", category: "Phishing", date: "Mar 18, 2026", reports: 3210, verified: true,
+      tags: ["Aadhaar", "UIDAI", "Phishing", "Identity Theft"],
+      affectedRegions: ["All India"]
+    },
+    {
+      id: 19,
+      title: "Fake Rent Agreement / Property Booking Fraud",
+      description: "Scammers post attractive rental or property listings on housing portals. After collecting token money and an advance via UPI, the 'owner' stops responding. The property either doesn't exist or belongs to someone else.",
+      severity: "medium", category: "Real Estate Fraud", date: "Mar 17, 2026", reports: 1450, verified: true,
+      tags: ["Rental", "Property", "Housing", "Advance Fraud"],
+      affectedRegions: ["Mumbai", "Delhi NCR", "Bengaluru", "Pune"]
+    },
+    {
+      id: 20,
+      title: "Fake Customer Care Number via Google Search",
+      description: "Scammers register fake helpline numbers for banks, Amazon, Flipkart, and airlines on Google. When users call, they are tricked into sharing OTPs or installing remote access apps like AnyDesk, leading to account takeover.",
+      severity: "high", category: "Impersonation", date: "Mar 16, 2026", reports: 4390, verified: true,
+      tags: ["Fake Helpline", "Google", "AnyDesk", "Remote Access"],
+      affectedRegions: ["All India"]
     }
   ];
 
@@ -330,17 +370,20 @@ const Storage = (() => {
     reports:     'sbk_reports',
     learn:       'sbk_learn',
     stats:       'sbk_stats',
-    initialized: 'sbk_initialized_v5'
+    initialized: 'sbk_initialized_v6'
   };
 
   // ─── INIT ───────────────────────────────────────────────────────────────────
 
   function initializeData() {
     if (localStorage.getItem(KEYS.initialized)) return;
+    // Preserve any previously submitted user reports across version upgrades
+    const savedReports = JSON.parse(localStorage.getItem('sbk_reports') || '[]')
+      .filter(r => r.userSubmitted !== false);
     localStorage.setItem(KEYS.alerts,    JSON.stringify(SEED_ALERTS));
     localStorage.setItem(KEYS.resources, JSON.stringify(SEED_RESOURCES));
     localStorage.setItem(KEYS.learn,     JSON.stringify(SEED_LEARN_CATEGORIES));
-    localStorage.setItem(KEYS.reports,   JSON.stringify([]));
+    localStorage.setItem(KEYS.reports,   JSON.stringify(savedReports));
     localStorage.setItem(KEYS.stats,     JSON.stringify(SEED_STATS));
     localStorage.setItem(KEYS.initialized, '1');
   }
