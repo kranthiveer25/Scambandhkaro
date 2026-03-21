@@ -167,7 +167,7 @@
     const sort = document.getElementById('sortSelect').value;
     const verifiedOnly = document.getElementById('verifiedOnly').checked;
 
-    let alerts = Storage.getAlerts({
+    let alerts = Storage.getSeedAlerts({
       severity: currentSeverity,
       category: currentCategory,
       search
@@ -248,7 +248,7 @@
   }
 
   function buildCategoryFilters() {
-    const allAlerts = Storage.getAlerts();
+    const allAlerts = Storage.getSeedAlerts();
     const categories = [...new Set(allAlerts.map(a => a.category))];
     const counts = {};
     allAlerts.forEach(a => counts[a.category] = (counts[a.category] || 0) + 1);
