@@ -12,7 +12,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyBdLMQctWAdXQUBIxGYyq2E2n8gpG5I5Ds",
+  apiKey:            "AIzaSyBdlMQctWAdXQUBIxGYyq2E2n8gpG5I5Ds",
   authDomain:        "scambandhkaro.firebaseapp.com",
   projectId:         "scambandhkaro",
   storageBucket:     "scambandhkaro.firebasestorage.app",
