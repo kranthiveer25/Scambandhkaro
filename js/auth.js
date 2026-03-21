@@ -49,13 +49,16 @@
          </div>`;
 
     return `
-      <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;min-width:0;">
         ${photo}
-        <span style="font-size:0.82rem;color:var(--text-secondary);max-width:100px;
-                     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+        <span class="nav-user-name" style="font-size:0.82rem;color:var(--text-secondary);
+                     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;">
           ${user.displayName || user.email.split('@')[0]}
         </span>
-        <button onclick="SBKSignOut()" class="btn btn-outline btn-sm">Logout</button>
+        <button onclick="SBKSignOut()" class="btn btn-outline btn-sm nav-logout-btn">
+          <span class="nav-logout-text">Logout</span>
+          <i class="fa-solid fa-right-from-bracket nav-logout-icon" style="display:none;"></i>
+        </button>
       </div>
       <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
         <span></span><span></span><span></span>

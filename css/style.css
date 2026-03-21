@@ -1087,8 +1087,16 @@ main { animation: pageIn 0.3s ease; }
 
   /* ── NAVBAR ── */
   .navbar { padding: 0 1rem; }
-  .navbar-actions { gap: 6px; }
-  .navbar-actions .btn-outline { display: none; }
+  .navbar-actions { gap: 6px; flex-shrink: 0; }
+  /* Hide Login/SignUp outline btn but keep logout btn for logged-in users */
+  .navbar-actions .btn-outline:not(.nav-logout-btn) { display: none; }
+  /* Hide username text on mobile — avatar only */
+  .nav-user-name { display: none !important; }
+  /* Show icon-only logout on mobile */
+  .nav-logout-text { display: none; }
+  .nav-logout-icon { display: inline !important; }
+  /* Compact logout button on mobile */
+  .nav-logout-btn { padding: 6px 8px !important; min-width: unset; }
 
   /* ── HERO ── */
   .hero { min-height: auto; padding: 0; }
