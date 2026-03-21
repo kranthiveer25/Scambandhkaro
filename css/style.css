@@ -1181,7 +1181,7 @@ main { animation: pageIn 0.3s ease; }
 
   /* ── HERO ── */
   .hero { padding: 2rem 0 1.5rem; }
-  .hero h1 { font-size: 1.55rem; }
+  .hero h1 { font-size: 2rem; }
   .hero-badge { font-size: 0.68rem; padding: 5px 10px; }
 
   /* ── STATS ── */
