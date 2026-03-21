@@ -200,7 +200,7 @@
             <div class="form-group">
               <label class="form-label">Suspicious URL or Link</label>
               <input type="text" class="form-control" id="linkInput"
-                placeholder="e.g. http://paypa1-secure-login.tk/verify/account"
+                placeholder="e.g. http://sbi-kyc-update.xyz/login or https://bit.ly/abc"
                 style="font-family:monospace;font-size:0.9rem;">
             </div>
             <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
@@ -238,7 +238,7 @@
             <div class="form-group">
               <label class="form-label">Phone Number</label>
               <input type="tel" class="form-control" id="phoneInput"
-                placeholder="e.g. +1-809-555-0123 or (900) 555-1234">
+                placeholder="e.g. +91-9876543210 or 1800-123-4567">
             </div>
             <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
               <button class="btn btn-primary btn-analyze" onclick="runAnalysis('phone')"><i class="fa-solid fa-magnifying-glass"></i> Check Number</button>
@@ -274,7 +274,7 @@
             <div class="form-group">
               <label class="form-label">Sender Email Address</label>
               <input type="email" class="form-control" id="emailInput"
-                placeholder="e.g. security-alert@paypa1-support.tk">
+                placeholder="e.g. kyc.alert@sbi-bank-alert.com or noreply@uidai-india.xyz">
             </div>
             <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
               <button class="btn btn-primary btn-analyze" onclick="runAnalysis('email')"><i class="fa-solid fa-magnifying-glass"></i> Verify Email</button>
@@ -389,26 +389,101 @@
 
   // ─── EXAMPLES ────────────────────────────────────────────────────────────────
   const examples = {
-    message: `URGENT NOTICE: Your Amazon account has been SUSPENDED due to suspicious activity.
+    message: [
+      // 1. KYC + OTP scam (very common in India)
+`[SBI ALERT] Dear Customer, your KYC has expired. Your account will be blocked within 24 hours.
 
-Your recent order #112-9384726 has been flagged. You must verify your account within 24 HOURS or your account will be permanently terminated.
+Please share the OTP sent to your registered mobile number with our agent to complete re-KYC immediately.
 
-Click here to verify NOW: http://amaz0n-security-verify.tk/account/confirm
+Call our KYC helpline: 9876012345
+—SBI Customer Care`,
 
-You may also need to pay a $4.99 reactivation fee via gift card to restore access. Call our support team at 1-900-555-0198 immediately.
+      // 2. CBI / Cyber Crime arrest threat scam
+`NOTICE FROM CYBER CRIME BRANCH — URGENT
 
-—Amazon Customer Security Team`,
-    link: 'http://paypa1-secure-account-verify.tk/login/confirm?user=victim&token=abc123&redirect=https://steal-credentials.ml',
-    phone: '+1-809-555-0123',
-    email: 'security-alert92847@paypa1-support.tk'
+Your Aadhaar number (XXXX-XXXX-8821) has been linked to a money laundering case registered under PMLA Act. An arrest warrant has been issued in your name.
+
+To avoid immediate arrest, pay a security deposit of ₹45,000 via UPI to: cybercell-fine@upi
+
+Call CBI Officer Ramesh Kumar: +91-9123456789
+Ignore this at your own risk.`,
+
+      // 3. KBC / Lucky draw prize scam
+`Congratulations! 🎉
+
+You have been selected as the LUCKY WINNER of KBC Season 16 Lottery!
+Prize Amount: ₹25,00,000 (Twenty-Five Lakhs)
+
+Your lucky number: JIO-2024-88421
+
+To claim your prize, pay a one-time processing fee of ₹2,500 via Paytm: 9988776655
+Contact: +91-8800123456
+
+—KBC Lottery Committee, Sony Entertainment`,
+
+      // 4. Job / WFH scam
+`WORK FROM HOME JOB OPPORTUNITY 🏠💰
+
+Earn ₹800–₹1200 per hour working part-time from home!
+Task: Like & Subscribe YouTube videos, follow Instagram pages.
+
+✅ No experience needed
+✅ Daily payout via GPay/PhonePe
+✅ Zero investment required
+
+JOIN NOW — Limited slots! Pay ₹499 registration fee to activate your account.
+WhatsApp: +91-7700900123`,
+
+      // 5. Income Tax / Refund scam
+`INCOME TAX DEPARTMENT — REFUND NOTICE
+
+Dear Taxpayer, your ITR for FY 2023-24 has been processed.
+Refund Amount: ₹8,750
+
+To receive your refund, verify your bank account details within 48 hours:
+→ Click here: http://incometax-refund-india.online/verify
+
+Provide: Account number, IFSC, PAN number, and ATM PIN for verification.
+
+—Income Tax Department of India`
+    ],
+    link: [
+      'http://sbi-netbanking-kyc-update.xyz/login/verify?user=customer&token=reset',
+      'https://uidai-aadhaar-verify.gov-in.online/update-details',
+      'http://hdfc-bank-kyc-alert.site/account/secure/verify',
+      'https://paytm-kyc-wallet-activate.online/verify-pan',
+      'http://irctc-refund-claim.xyz/passenger/refund?ref=PNR8823',
+      'http://bit.ly/pm-kisan-samman-apply-2024'
+    ],
+    phone: [
+      '+92-300-1234567',   // Pakistan scam call
+      '9999999999',        // Repeated digits — fake
+      '+91-900-555-1234',  // Premium rate India
+      '1800-123-9999',     // Spoofed toll-free
+      '742742934238434',   // Invalid too-long number
+      '5412345678'         // Invalid Indian prefix
+    ],
+    email: [
+      'kyc.alert.verify.now@gmail.com',
+      'income.tax.refund.2024@yahoo.in',
+      'noreply-security@sbi-bank-alert.com',
+      'verify-aadhaar@uidai-india.online',
+      'security-update@hdfcbank-support.xyz',
+      'epfo-pf-withdrawal@rediffmail.com'
+    ]
   };
+
+  // Track which example index each tool is on
+  const exampleIndex = { message: 0, link: 0, phone: 0, email: 0 };
 
   function loadExample(type) {
     const input = getInput(type);
-    if (input) {
-      input.value = examples[type];
-      if (type === 'message') updateCharCount('messageInput', 'messageCharCount');
-    }
+    if (!input) return;
+    const pool = examples[type];
+    const val = Array.isArray(pool) ? pool[exampleIndex[type] % pool.length] : pool;
+    input.value = val;
+    exampleIndex[type] = (exampleIndex[type] + 1) % pool.length;
+    if (type === 'message') updateCharCount('messageInput', 'messageCharCount');
   }
 
   function clearTool(type) {
