@@ -697,21 +697,51 @@ const ScamDetector = (() => {
     }
 
     // ── 7. DIGIT PATTERNS ────────────────────────────────────────────────────
-    // Repeating blocks (e.g. 9999999999, 1234512345)
-    if (/(\d)\1{5,}/.test(digitsOnly)) {
-      score += 20;
-      findings.push({ type: 'repeating_digits', detail: 'Suspicious repeating digit pattern — likely a fake or test number', severity: 'medium' });
+
+    // All same digit (e.g. 0000000000, 9999999999) — check first as strongest signal
+    if (/^(\d)\1+$/.test(digitsOnly)) {
+      score += 50;
+      findings.push({ type: 'all_same_digits', detail: `All identical digits (${digitsOnly[0]}×${digitsOnly.length}) — clearly not a real phone number`, severity: 'high' });
     }
-    // Fully sequential (e.g. 1234567890)
+    // Single digit repeating in a run (e.g. 9812222222)
+    else if (/(\d)\1{5,}/.test(digitsOnly)) {
+      score += 22;
+      findings.push({ type: 'repeating_digits', detail: 'Long run of repeated digits — likely a fake or test number', severity: 'medium' });
+    }
+
+    // Alternating / short-block repeating patterns (e.g. 32323232, 12121212, 123123123)
+    // Strategy: check if the number is just a short block repeated
+    if (score < 20) { // skip if already heavily flagged
+      let foundRepBlock = false;
+      for (let blockLen = 1; blockLen <= 4; blockLen++) {
+        const block = digitsOnly.slice(0, blockLen);
+        // Number must be at least 3 repetitions long to matter
+        if (digitsOnly.length >= blockLen * 3) {
+          const repeated = block.repeat(Math.ceil(digitsOnly.length / blockLen)).slice(0, digitsOnly.length);
+          if (repeated === digitsOnly) {
+            score += 30;
+            findings.push({ type: 'repeating_block_pattern', detail: `Number is just "${block}" repeated ${Math.floor(digitsOnly.length / blockLen)} times — clearly not a real phone number`, severity: 'high' });
+            foundRepBlock = true;
+            break;
+          }
+        }
+      }
+    }
+
+    // Fully sequential ascending or descending (e.g. 1234567890, 9876543210)
     if ('01234567890123456789'.includes(digitsOnly.slice(0, 8)) ||
         '98765432109876543210'.includes(digitsOnly.slice(0, 8))) {
-      score += 15;
-      findings.push({ type: 'sequential_pattern', detail: 'Sequential digit pattern — this appears to be a fake number', severity: 'medium' });
+      score += 18;
+      findings.push({ type: 'sequential_pattern', detail: 'Sequential ascending/descending digits — this appears to be a fake number', severity: 'medium' });
     }
-    // All same digit (e.g. 0000000000)
-    if (/^(\d)\1+$/.test(digitsOnly)) {
-      score += 30;
-      findings.push({ type: 'all_same_digits', detail: 'All identical digits — clearly not a real phone number', severity: 'high' });
+
+    // ── 8. UNUSUAL LENGTH FOR INDIAN CONTEXT ────────────────────────────────
+    // India uses 10-digit mobiles and 11-digit (0 + 10) landlines.
+    // 7, 8, or 9 digit numbers don't match any common Indian format.
+    if (digitsOnly.length >= 7 && digitsOnly.length <= 9 &&
+        !findings.some(f => f.type === 'invalid_length')) {
+      score += 18;
+      findings.push({ type: 'unusual_length_india', detail: `${digitsOnly.length} digits — not a valid Indian mobile (10 digits) or landline format`, severity: 'medium' });
     }
 
     score = clamp(score, 0, 100);
