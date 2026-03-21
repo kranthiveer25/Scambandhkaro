@@ -419,9 +419,18 @@ const Storage = (() => {
       date:            new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
       reports:         1,
       verified:        false,
+      userSubmitted:   true,
       tags:            report.tags        || [],
       affectedRegions: report.regions ? [report.regions] : ['Unknown']
     });
+  }
+
+  function getSeedAlerts(filters = {}) {
+    return getAlerts(filters).filter(a => !a.userSubmitted);
+  }
+
+  function getUserAlerts(filters = {}) {
+    return getAlerts(filters).filter(a => a.userSubmitted);
   }
 
   // ─── LEARN ─────────────────────────────────────────────────────────────────
@@ -444,7 +453,7 @@ const Storage = (() => {
 
   return {
     initializeData,
-    getAlerts, addAlert,
+    getAlerts, getSeedAlerts, getUserAlerts, addAlert,
     getResources,
     getReports, addReport, addAlertFromReport,
     getLearnCategories, getLearnCategory,
